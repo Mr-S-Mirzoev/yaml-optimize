@@ -1,0 +1,6 @@
+[submodule "deps/rapidyaml"]
+	path = deps/rapidyaml
+	url = https://github.com/biojppm/rapidyaml.git
+[submodule "deps/fmt"]
+	path = deps/fmt
+	url = https://github.com/fmtlib/fmt.git

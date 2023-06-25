@@ -1,0 +1,26 @@
+defaults: &defaults
+  logging:
+    level: debug
+    file: /var/log/application.log
+
+database:
+  <<: *defaults
+  host: localhost
+  port: 5432
+  username: admin
+  password: password
+
+cache:
+  <<: *defaults
+  enabled: true
+  ttl: 3600
+
+api:
+  endpoint: https://api.example.com
+  timeout: 5000
+
+email:
+  <<: *defaults
+  smtp_server: smtp.example.com
+  smtp_port: 587
+  from: info@example.com
