@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(yaml-optimize)
+project(yaml-resolve)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -18,18 +18,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin_${YO_BUILD_TYPE}")
 
 set(TARGET_NAME "${PROJECT_NAME}")
 
-# Add the rapidyaml library
-add_subdirectory(deps/rapidyaml)
-
-# Add fmt library as a dependency
-add_subdirectory(deps/fmt)
-
 # Define the target executable
 add_executable(${TARGET_NAME} src/main.cpp)
 
 # Link against rapidyaml library
 target_link_libraries(${TARGET_NAME} PRIVATE ryml::ryml)
-target_include_directories(${TARGET_NAME} PRIVATE deps/clara)
+target_include_directories(${TARGET_NAME} PRIVATE ../deps/clara)
 
 target_link_libraries(${TARGET_NAME} PRIVATE fmt::fmt)
 
@@ -37,6 +31,3 @@ target_link_libraries(${TARGET_NAME} PRIVATE fmt::fmt)
 if(YO_DEBUG)
     target_compile_definitions(${TARGET_NAME} PRIVATE "YO_DEBUG")
 endif()
-
-# Add testing utils
-add_subdirectory(test)

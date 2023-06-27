@@ -1,5 +1,5 @@
-#include "optimizer/optimizer.hpp"
-#include "utils/cli.hpp"
+#include "../../src/utils/cli.hpp"
+#include "resolver.hpp"
 
 void run(int argc, char* argv[])
 {
@@ -9,11 +9,11 @@ void run(int argc, char* argv[])
 
     std::ifstream is(args.in_fname);
 
-    YamlOptimizer optimizer(is);
+    YamlResolver resolver(is);
 
-    optimizer.optimize();
+    resolver.resolve();
 
-    optimizer.dump(args.out_fname);
+    resolver.dump(args.out_fname);
 }
 
 int main(int argc, char* argv[])

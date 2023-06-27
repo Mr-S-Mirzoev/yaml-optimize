@@ -33,3 +33,6 @@
 
 # Build files
 build
+
+# Optimized YAML files
+*.optimized

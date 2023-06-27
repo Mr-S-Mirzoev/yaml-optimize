@@ -10,7 +10,14 @@
 #include <string>
 #include <vector>
 
+#include "fmt/format.h"
 #include "ryml.hpp"
+
+class OptimizationError : public std::runtime_error
+{
+public:
+    OptimizationError(std::string const& what) : std::runtime_error(what) {}
+};
 
 class YamlOptimizer
 {
@@ -68,12 +75,19 @@ public:
     std::string str() const
     {
         std::ostringstream os;
-
-        if (is_utf8)
-            os << BOM;
-
-        os << tree_ << std::endl;
+        write_to_ostream(os);
         return os.str();
+    }
+
+    void dump(std::string const& filename)
+    {
+        std::ofstream of(filename);
+
+        if (!of.good())
+            throw OptimizationError(fmt::format(
+                "Failed to create output file with name {}", filename));
+
+        write_to_ostream(of);
     }
 
 private:
@@ -85,6 +99,14 @@ private:
     bool is_utf8 = false;
 
     void get_info() { get_info_impl(tree_.rootref()); }
+
+    void write_to_ostream(std::ostream& os) const
+    {
+        if (is_utf8)
+            os << BOM;
+
+        os << tree_;
+    }
 
     ryml::substr get_clean_content(std::string& content)
     {
