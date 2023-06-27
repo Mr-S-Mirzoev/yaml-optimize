@@ -1,23 +1,23 @@
-defaults: &defaults
-  logging:
-    level: debug
-    file: /var/log/application.log
-database:
-  <<: *defaults
-  host: localhost
-  port: 5432
-  username: admin
-  password: password
-cache:
-  <<: *defaults
-  enabled: true
-  ttl: 3600
-api:
-  endpoint: https://api.example.com
-  timeout: 5000
-email:
-  <<: *defaults
-  smtp_server: smtp.example.com
-  smtp_port: 587
-  from: info@example.com
-debug: *defaults
+# YAML example with references and anchors
+
+# Define an anchor for a sequence
+- &seq_anchor
+  - Apple
+  - Orange
+  - Banana
+
+# Define a reference to the anchor
+- Fruits: *seq_anchor
+
+# Define an anchor for a mapping
+- &map_anchor
+  name: John Doe
+  age: 30
+  profession: Developer
+
+# Define a reference to the anchor
+- Person: *map_anchor
+
+# Additional data
+- SomeList: [1, 2, 3, 4]
+- SomeValue: true

@@ -1,32 +1,29 @@
-defaults:
-  logging:
-    level: debug
-    file: /var/log/application.log
-database:
-  logging:
-    level: debug
-    file: /var/log/application.log
-  host: localhost
-  port: 5432
-  username: admin
-  password: password
-cache:
-  logging:
-    level: debug
-    file: /var/log/application.log
-  enabled: true
-  ttl: 3600
-api:
-  endpoint: 'https://api.example.com'
-  timeout: 5000
-email:
-  logging:
-    level: debug
-    file: /var/log/application.log
-  smtp_server: smtp.example.com
-  smtp_port: 587
-  from: info@example.com
-debug:
-  logging:
-    level: debug
-    file: /var/log/application.log
+# Define an anchor-to-be part in a sequence
+- - Apple
+  - Orange
+  - Banana
+
+# Define a repetitive part of previous seq
+- Fruits:
+    - Apple
+    - Orange
+    - Banana
+
+# Define an anchor-to-be part in a mapping
+- name: John Doe
+  age: 30
+  profession: Developer
+
+# Define a repetitive part of previous map
+- Person:
+    name: John Doe
+    age: 30
+    profession: Developer
+
+# Additional data
+- SomeList:
+    - 1
+    - 2
+    - 3
+    - 4
+- SomeValue: true

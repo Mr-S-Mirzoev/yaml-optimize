@@ -25,14 +25,6 @@ class YamlOptimizer
     struct NodeInfo
     {
         std::size_t size;
-
-#ifdef YO_DEBUG
-        // Overload the operator<< function to print NodeInfo
-        friend std::ostream& operator<<(std::ostream& os, const NodeInfo& info)
-        {
-            return os << "NodeInfo { size: " << info.size << " }";
-        }
-#endif // YO_DEBUG
     };
 
 public:
@@ -51,10 +43,13 @@ public:
 #ifdef YO_DEBUG
         for (int i = 0; i < data_.size(); ++i)
         {
+            std::string key;
+            if (tree_.ref(i).has_key())
+                key = {tree_.ref(i).key().data(), tree_.ref(i).key().size()};
             std::string val;
             if (tree_.ref(i).has_val())
                 val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
-            DEBUG_PRINT("{}({}) : {}", i, val, data_[i].size);
+            DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
         }
 #endif // YO_DEBUG
     }
@@ -71,23 +66,64 @@ public:
         {
             for (std::size_t j = i + 1; j < data_.size(); ++j)
             {
+                DEBUG_PRINT("i={}; j={}", i, j);
+                if (i >= data_.size() || j >= data_.size())
+                    break;
+
                 auto a = tree_.ref(i);
                 auto b = tree_.ref(j);
+
                 if (a.is_ref() || b.is_ref())
                     continue;
 
-                if (nodes_equal(a, b))
-                {
-                    std::string anchor;
-                    if (a.has_val_anchor())
-                        anchor = {a.val_anchor().data(), a.val_anchor().size()};
-                    else
-                        anchor = fmt::format("anchor_{}", anchor_id_++);
+                if (!a.is_map())
+                    continue;
+                    
+                if (!nodes_equal(a, b))
+                    continue;
 
-                    b.set_val_ref({anchor.data(), anchor.size()});
+                ryml::csubstr anchor;
+                if (a.has_val_anchor())
+                {
+                    anchor = {a.val_anchor().data(), a.val_anchor().size()};
                 }
+                else
+                {
+                    auto anchor_str = fmt::format("anchor_{}", anchor_id_++);
+                    anchor = tree_.copy_to_arena({anchor_str.data(), anchor_str.size()});
+                    a.set_val_anchor(anchor);
+                }
+
+                auto next_valid_id = b.next_sibling().id();
+                b.clear_children();
+                b.set_type(ryml::VALREF);
+                b.set_val_ref(anchor);
+
+                DEBUG_PRINT("Count: {}", tree_.size());
+
+                tree_.reorder();
+
+                if (next_valid_id == ryml::NONE)
+                    next_valid_id = data_.size();
+
+                DEBUG_PRINT("next_valid_id={}; b.id = {}", next_valid_id, b.id());
+                data_.erase(data_.begin() + b.id() + 1, data_.begin() + next_valid_id);
+                DEBUG_PRINT("data_.size={}", data_.size());
             }
         }
+
+#ifdef YO_DEBUG
+        for (int i = 0; i < data_.size(); ++i)
+        {
+            std::string key;
+            if (tree_.ref(i).has_key())
+                key = {tree_.ref(i).key().data(), tree_.ref(i).key().size()};
+            std::string val;
+            if (tree_.ref(i).has_val())
+                val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
+            DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
+        }
+#endif // YO_DEBUG
     }
 
     // Function to retrieve the currently stored YAML string
