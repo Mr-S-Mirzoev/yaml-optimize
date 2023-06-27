@@ -67,8 +67,27 @@ public:
     // Function to optimize the YAML configuration
     void optimize()
     {
-        // Perform the optimization logic here
-        // ...
+        for (std::size_t i = 0; i < data_.size() - 1; ++i)
+        {
+            for (std::size_t j = i + 1; j < data_.size(); ++j)
+            {
+                auto a = tree_.ref(i);
+                auto b = tree_.ref(j);
+                if (a.is_ref() || b.is_ref())
+                    continue;
+
+                if (nodes_equal(a, b))
+                {
+                    std::string anchor;
+                    if (a.has_val_anchor())
+                        anchor = {a.val_anchor().data(), a.val_anchor().size()};
+                    else
+                        anchor = fmt::format("anchor_{}", anchor_id_++);
+
+                    b.set_val_ref({anchor.data(), anchor.size()});
+                }
+            }
+        }
     }
 
     // Function to retrieve the currently stored YAML string
@@ -94,11 +113,55 @@ private:
     std::vector<NodeInfo> data_;
     ryml::Tree tree_;
     std::string content_;
+    std::size_t anchor_id_ = 0;
 
     static constexpr std::string_view BOM{"\xEF\xBB\xBF"};
     bool is_utf8 = false;
 
     void get_info() { get_info_impl(tree_.rootref()); }
+
+    bool nodes_equal(const ryml::ConstNodeRef& a,
+                     const ryml::ConstNodeRef& b) const
+    {
+        if (data_[a.id()].size != data_[b.id()].size)
+            return false;
+
+        if (a.type() != b.type())
+            return false;
+
+        if (!a.is_container())
+        {
+            if (a.has_key())
+            {
+                if (a.key() != b.key())
+                    return false;
+            }
+
+            if (a.val() != b.val())
+                return false;
+
+            if (a.has_val_tag() != b.has_val_tag())
+                return false;
+
+            if (a.has_val_tag() && a.val_tag() != b.val_tag())
+                return false;
+        }
+        else
+        {
+            if (a.has_children() != b.has_children())
+                return false;
+
+            if (a.num_children() != b.num_children())
+                return false;
+
+            for (auto a_it = a.begin(), b_it = b.begin();
+                 a_it != a.end() && b_it != b.end(); ++a_it, ++b_it)
+                if (!nodes_equal(*a_it, *b_it))
+                    return false;
+        }
+
+        return true;
+    }
 
     void write_to_ostream(std::ostream& os) const
     {
