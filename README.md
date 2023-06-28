@@ -11,6 +11,6 @@ Yaml optimiser is a command-line tool written in C++ that optimises large YAML c
 ## Aims
 
 [ ] Provide a fast and convenient way to optimize large YAML configurations
-[ ] Replace absolutely identical blocks with anchors to the first one
+[+] Replace absolutely identical blocks with anchors to the first one
 [ ] Replace similar blocks with merge keys
 [ ] Preserve comments and spacing (?) of the original document. Also, preserve block/flow format.
