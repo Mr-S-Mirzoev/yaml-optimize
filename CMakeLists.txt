@@ -5,12 +5,15 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Set the default build type to Release if not specified
 set(YO_DEBUG $<$<CONFIG:Debug>:true>)
-if(NOT YO_DEBUG)
+if(NOT YO_DEBUG OR NOT ${YO_DEBUG})
     set(YO_DEBUG false)
     set(YO_BUILD_TYPE release)
 else()
+    set(YO_DEBUG true)
     set(YO_BUILD_TYPE debug)
 endif()
+
+message("YO_DEBUG: ${YO_DEBUG}")
 
 # Set the output directories based on the build type
 set(BUILD_DIR "${CMAKE_BINARY_DIR}/build_${YO_BUILD_TYPE}")

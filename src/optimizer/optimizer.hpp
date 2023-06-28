@@ -82,9 +82,11 @@ public:
                     
                 if (!nodes_equal(a, b))
                 {
+#ifdef YO_DEBUG
                     std::cout << a << std::endl << std::endl;
                     std::cout << b << std::endl << std::endl;
                     std::cout << std::endl << std::endl;
+#endif // YO_DEBUG
                     continue;
                 }
 
