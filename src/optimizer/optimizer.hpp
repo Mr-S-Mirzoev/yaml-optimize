@@ -6,6 +6,7 @@
 #include "../utils/string.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <istream>
 #include <string>
 #include <vector>
@@ -80,7 +81,12 @@ public:
                     continue;
                     
                 if (!nodes_equal(a, b))
+                {
+                    std::cout << a << std::endl << std::endl;
+                    std::cout << b << std::endl << std::endl;
+                    std::cout << std::endl << std::endl;
                     continue;
+                }
 
                 ryml::csubstr anchor;
                 if (a.has_val_anchor())
@@ -95,8 +101,15 @@ public:
                 }
 
                 auto next_valid_id = b.next_sibling().id();
+                ryml::csubstr key;
+                if (b.has_key())
+                    key = b.key();
+
                 b.clear_children();
                 b.set_type(ryml::VALREF);
+
+                // Otherwise `key` is overwritten for some reason
+                b.set_key(key);
                 b.set_val_ref(anchor);
 
                 DEBUG_PRINT("Count: {}", tree_.size());
@@ -156,44 +169,93 @@ private:
 
     void get_info() { get_info_impl(tree_.rootref()); }
 
+    bool long_types_equal(const ryml::ConstNodeRef& a, const ryml::ConstNodeRef& b) const
+    {
+        if (a.is_map())
+            return b.is_map();
+
+        if (a.is_seq())
+            return b.is_seq();
+
+        if (a.is_keyval())
+            return b.is_keyval();
+
+        if (a.is_val())
+            return b.is_val();
+
+        return false;
+    }
+
     bool nodes_equal(const ryml::ConstNodeRef& a,
                      const ryml::ConstNodeRef& b) const
     {
         if (data_[a.id()].size != data_[b.id()].size)
+        {
+            DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size, data_[b.id()].size);
             return false;
+        }
 
         if (a.type() != b.type())
-            return false;
+        {
+            DEBUG_PRINT("Type mismatch: {} vs {}", a.type_str(), b.type_str());
+
+            if (!long_types_equal(a, b))
+                return false;
+        }
 
         if (!a.is_container())
         {
             if (a.has_key())
             {
                 if (a.key() != b.key())
+                {
+                    DEBUG_PRINT("Key mismatch");
                     return false;
+                }
             }
 
             if (a.val() != b.val())
+            {
+                DEBUG_PRINT("Val mismatch");
                 return false;
+            }
 
             if (a.has_val_tag() != b.has_val_tag())
+            {
+                DEBUG_PRINT("Val tag mismatch 1");
                 return false;
+            }
 
             if (a.has_val_tag() && a.val_tag() != b.val_tag())
+            {
+                DEBUG_PRINT("Val tag mismatch 2");
                 return false;
+            }
         }
         else
         {
             if (a.has_children() != b.has_children())
+            {
+                DEBUG_PRINT("No child mismatch");
                 return false;
+            }
 
             if (a.num_children() != b.num_children())
+            {
+                DEBUG_PRINT("Num children mismatch");
                 return false;
+            }
 
             for (auto a_it = a.begin(), b_it = b.begin();
-                 a_it != a.end() && b_it != b.end(); ++a_it, ++b_it)
+                 a_it != a.end() && b_it != b.end();
+                 ++a_it, ++b_it)
+            {
                 if (!nodes_equal(*a_it, *b_it))
+                {
+                    DEBUG_PRINT("Child mismatch");
                     return false;
+                }
+            }
         }
 
         return true;
