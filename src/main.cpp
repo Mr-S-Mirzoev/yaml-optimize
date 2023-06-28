@@ -1,6 +1,12 @@
 #include "optimizer/optimizer.hpp"
 #include "utils/cli.hpp"
 
+#ifdef YO_DEBUG
+#pragma message ("Building debug version of optimizer")
+#else
+#pragma message ("Building release version of optimizer")
+#endif
+
 int main(int argc, char* argv[])
 {
     try

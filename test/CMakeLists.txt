@@ -10,6 +10,4 @@ target_include_directories(${TARGET_NAME} PRIVATE ../deps/clara)
 target_link_libraries(${TARGET_NAME} PRIVATE fmt::fmt)
 
 # Add macro for Debug build
-if(YO_DEBUG)
-    target_compile_definitions(${TARGET_NAME} PRIVATE "YO_DEBUG")
-endif()
+target_compile_definitions(${TARGET_NAME} PRIVATE "$<$<CONFIG:Debug>:YO_DEBUG>")

@@ -1,6 +1,12 @@
 #include "../../src/utils/cli.hpp"
 #include "resolver.hpp"
 
+#ifdef YO_DEBUG
+#pragma message ("Building debug version of resolver")
+#else
+#pragma message ("Building release version of resolver")
+#endif
+
 void run(int argc, char* argv[])
 {
     cli::Args args{};
