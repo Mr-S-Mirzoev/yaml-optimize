@@ -5,9 +5,9 @@
 
 # Define a repetitive part of previous seq
 - Fruits:
-    - Apple
-    - Orange
-    - Banana
+  - Apple
+  - Orange
+  - Banana
 
 # Define an anchor-to-be part in a mapping
 - name: John Doe

@@ -1,0 +1,26 @@
+# YAML example with references and anchors
+
+# Define an anchor for a nested sequence
+- top_level:
+    - nested:
+        - &sequence_anchor
+          - Apple
+          - Orange
+          - Banana
+
+# Define an anchor for a nested mapping
+- another_level:
+    - even_deeper:
+        - further:
+            - &mapping_anchor
+              key1: value1
+              key2: value2
+
+# Use the anchors in different parts of the YAML
+- other_level:
+    - some_key: *sequence_anchor
+    - additional_key: *mapping_anchor
+
+# Additional data
+- SomeList: [1, 2, 3, 4]
+- SomeValue: true

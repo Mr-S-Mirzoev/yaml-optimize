@@ -77,7 +77,7 @@ public:
                 if (a.is_ref() || b.is_ref())
                     continue;
 
-                if (!a.is_map())
+                if (!a.is_map() && !a.is_seq())
                     continue;
                     
                 if (!nodes_equal(a, b))
@@ -101,6 +101,9 @@ public:
                 }
 
                 auto next_valid_id = b.next_sibling().id();
+                if (next_valid_id == ryml::NONE && b.has_parent())
+                    next_valid_id = b.parent().next_sibling().id();
+
                 ryml::csubstr key;
                 if (b.has_key())
                     key = b.key();
@@ -109,6 +112,7 @@ public:
                 b.set_type(ryml::VALREF);
 
                 // Otherwise `key` is overwritten for some reason
+                // Most likely due to set_type.
                 b.set_key(key);
                 b.set_val_ref(anchor);
 
