@@ -40,7 +40,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration in a multithreaded environment
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j {{ steps.cpus.outputs.count }}
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j ${{steps.cpus.outputs.count}}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
