@@ -1,0 +1,23 @@
+# YAML example with references and anchors
+
+# Define an anchor for a sequence
+- &seq_anchor
+  - Apple
+  - Orange
+  - Banana
+
+# Define a reference to the anchor
+- Fruits: *seq_anchor
+
+# Define an anchor for a mapping
+- &map_anchor
+  name: John Doe
+  age: 30
+  profession: Developer
+
+# Define a reference to the anchor
+- Person: *map_anchor
+
+# Additional data
+- SomeList: [1, 2, 3, 4]
+- SomeValue: true
