@@ -27,9 +27,20 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
+    - name: Get the number of CPUs that the current process has access to.
+        id: cpus
+        run: |
+          from os import environ, sched_getaffinity
+
+          num_cpus = len(sched_getaffinity(0))
+          output_file = environ["GITHUB_OUTPUT"]
+          with open(output_file, "a", encoding="utf-8") as output_stream:
+              output_stream.write(f"count={num_cpus}\n")
+        shell: python
+
     - name: Build
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      # Build your program with the given configuration in a multithreaded environment
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j {{ steps.cpus.outputs.count }}
 
     - name: Test
       working-directory: ${{github.workspace}}/build
