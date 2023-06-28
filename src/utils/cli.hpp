@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../debug/throw.hpp"
+
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
 #include "clara.hpp"
-#include "fmt/format.h"
 
 namespace cli
 {
@@ -38,8 +39,7 @@ bool parse(int argc, char* argv[], Args& args)
 
     auto result = cli.parse(clara::Args(argc, argv));
     if (!result)
-        throw ArgParseError(
-            fmt::format("Error in command line: {}", result.errorMessage()));
+        YO_THROW(ArgParseError, "Error in command line: {}", result.errorMessage());
 
     if (args.show_help)
     {
@@ -48,12 +48,10 @@ bool parse(int argc, char* argv[], Args& args)
     }
 
     if (args.in_fname.empty())
-        throw ArgParseError(
-            fmt::format("Input filename {} not specified.", args.in_fname));
+        YO_THROW(ArgParseError, "Input filename {} not specified.", args.in_fname);
 
     if (!std::filesystem::exists(args.in_fname))
-        throw ArgParseError(
-            fmt::format("Input file {} doesn't exist.", args.in_fname));
+        YO_THROW(ArgParseError, "Input file {} doesn't exist.", args.in_fname);
 
     // Set output filename to input filename with ".optimized" appended
     // if output isn't specified

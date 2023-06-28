@@ -1,26 +1,21 @@
 #include "optimizer/optimizer.hpp"
 #include "utils/cli.hpp"
 
-void run(int argc, char* argv[])
-{
-    cli::Args args{};
-    if (!cli::parse(argc, argv, args))
-        exit(0);
-
-    std::ifstream is(args.in_fname);
-
-    YamlOptimizer optimizer(is);
-
-    optimizer.optimize();
-
-    optimizer.dump(args.out_fname);
-}
-
 int main(int argc, char* argv[])
 {
     try
     {
-        run(argc, argv);
+        cli::Args args{};
+        if (!cli::parse(argc, argv, args))
+            return 0;
+
+        std::ifstream is(args.in_fname);
+
+        YamlOptimizer optimizer(is);
+
+        optimizer.optimize();
+
+        optimizer.dump(args.out_fname);
     }
     catch (const cli::ArgParseError& e)
     {
@@ -29,7 +24,7 @@ int main(int argc, char* argv[])
                   << std::endl;
         return 1;
     }
-    catch (const OptimizationError& e)
+    catch (const YamlOptimizerError& e)
     {
         std::cerr << fmt::format("Error during optimization occured: {}",
                                  e.what())

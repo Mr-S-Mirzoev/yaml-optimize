@@ -2,6 +2,7 @@
 
 #include "../../src/debug/assert.hpp"
 #include "../../src/debug/print.hpp"
+#include "../../src/debug/throw.hpp"
 
 #include "../../src/utils/string.hpp"
 
@@ -10,13 +11,12 @@
 #include <string>
 #include <vector>
 
-#include "fmt/format.h"
 #include "ryml.hpp"
 
-class OptimizationError : public std::runtime_error
+class YamlResolverError : public std::runtime_error
 {
 public:
-    OptimizationError(std::string const& what) : std::runtime_error(what) {}
+    YamlResolverError(std::string const& what) : std::runtime_error(what) {}
 };
 
 class YamlResolver
@@ -48,8 +48,7 @@ public:
         std::ofstream of(filename);
 
         if (!of.good())
-            throw OptimizationError(fmt::format(
-                "Failed to create output file with name {}", filename));
+            YO_THROW(YamlResolverError, "Failed to create output file with name {}", filename);
 
         write_to_ostream(of);
     }

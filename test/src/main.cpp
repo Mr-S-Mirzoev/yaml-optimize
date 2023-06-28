@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
                   << std::endl;
         return 1;
     }
-    catch (const OptimizationError& e)
+    catch (const YamlOptimizerError& e)
     {
         std::cerr << fmt::format("Error during optimization occured: {}",
                                  e.what())

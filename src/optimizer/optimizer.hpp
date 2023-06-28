@@ -2,6 +2,7 @@
 
 #include "../debug/assert.hpp"
 #include "../debug/print.hpp"
+#include "../debug/throw.hpp"
 
 #include "../utils/string.hpp"
 
@@ -13,12 +14,6 @@
 
 #include "fmt/format.h"
 #include "ryml.hpp"
-
-class OptimizationError : public std::runtime_error
-{
-public:
-    OptimizationError(std::string const& what) : std::runtime_error(what) {}
-};
 
 class YamlOptimizer
 {
@@ -42,16 +37,7 @@ public:
         get_info();
 
 #ifdef YO_DEBUG
-        for (int i = 0; i < data_.size(); ++i)
-        {
-            std::string key;
-            if (tree_.ref(i).has_key())
-                key = {tree_.ref(i).key().data(), tree_.ref(i).key().size()};
-            std::string val;
-            if (tree_.ref(i).has_val())
-                val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
-            DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
-        }
+        debug_print_data();
 #endif // YO_DEBUG
     }
 
@@ -97,7 +83,7 @@ public:
                 }
                 else
                 {
-                    auto anchor_str = fmt::format("anchor_{}", anchor_id_++);
+                    auto anchor_str = fmt::format("anchor_{}", anchor_count_++);
                     anchor = tree_.copy_to_arena({anchor_str.data(), anchor_str.size()});
                     a.set_val_anchor(anchor);
                 }
@@ -105,6 +91,8 @@ public:
                 auto next_valid_id = b.next_sibling().id();
                 if (next_valid_id == ryml::NONE && b.has_parent())
                     next_valid_id = b.parent().next_sibling().id();
+                if (next_valid_id == ryml::NONE)
+                    next_valid_id = data_.size();
 
                 ryml::csubstr key;
                 if (b.has_key())
@@ -118,30 +106,21 @@ public:
                 b.set_key(key);
                 b.set_val_ref(anchor);
 
-                DEBUG_PRINT("Count: {}", tree_.size());
+                DEBUG_PRINT("tree_.size={}", tree_.size());
 
+                // Reorder the tree nodes (fix indexes to match [0 .. sz - 1] range)
                 tree_.reorder();
 
-                if (next_valid_id == ryml::NONE)
-                    next_valid_id = data_.size();
-
                 DEBUG_PRINT("next_valid_id={}; b.id = {}", next_valid_id, b.id());
+
+                // Erase the redundant nodes from the data vector
                 data_.erase(data_.begin() + b.id() + 1, data_.begin() + next_valid_id);
                 DEBUG_PRINT("data_.size={}", data_.size());
             }
         }
 
 #ifdef YO_DEBUG
-        for (int i = 0; i < data_.size(); ++i)
-        {
-            std::string key;
-            if (tree_.ref(i).has_key())
-                key = {tree_.ref(i).key().data(), tree_.ref(i).key().size()};
-            std::string val;
-            if (tree_.ref(i).has_val())
-                val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
-            DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
-        }
+        debug_print_data();
 #endif // YO_DEBUG
     }
 
@@ -158,8 +137,7 @@ public:
         std::ofstream of(filename);
 
         if (!of.good())
-            throw OptimizationError(fmt::format(
-                "Failed to create output file with name {}", filename));
+            YO_THROW(YamlOptimizerError, "Failed to create output file with name {}", filename);
 
         write_to_ostream(of);
     }
@@ -168,7 +146,7 @@ private:
     std::vector<NodeInfo> data_;
     ryml::Tree tree_;
     std::string content_;
-    std::size_t anchor_id_ = 0;
+    std::size_t anchor_count_ = 0;
 
     static constexpr std::string_view BOM{"\xEF\xBB\xBF"};
     bool is_utf8 = false;
@@ -211,13 +189,10 @@ private:
 
         if (!a.is_container())
         {
-            if (a.has_key())
+            if (a.has_key() && a.key() != b.key())
             {
-                if (a.key() != b.key())
-                {
-                    DEBUG_PRINT("Key mismatch");
-                    return false;
-                }
+                DEBUG_PRINT("Key mismatch");
+                return false;
             }
 
             if (a.val() != b.val())
@@ -304,7 +279,7 @@ private:
     {
         // Store the size of the current node in the data vector
         std::size_t nodeId{node.id()};
-        DEBUG_ASSERT(nodeId < data_.size());
+        DEBUG_ASSERT_WITH_MSG(nodeId < data_.size(), "Node id must never exceed nodes count");
 
         auto& node_size = data_[nodeId].size;
 
@@ -323,4 +298,20 @@ private:
 
         return node_size;
     }
+
+#ifdef YO_DEBUG
+    void debug_print_data() const
+    {
+        for (int i = 0; i < data_.size(); ++i)
+        {
+            std::string key;
+            if (tree_.ref(i).has_key())
+                key = {tree_.ref(i).key().data(), tree_.ref(i).key().size()};
+            std::string val;
+            if (tree_.ref(i).has_val())
+                val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
+            DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
+        }
+    }
+#endif // YO_DEBUG
 };

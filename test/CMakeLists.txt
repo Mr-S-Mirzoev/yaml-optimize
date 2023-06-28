@@ -1,22 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
-project(yaml-resolve)
-
-set(CMAKE_CXX_STANDARD 20)
-
-# Set the default build type to Release if not specified
-set(YO_DEBUG $<$<CONFIG:Debug>:true>)
-if(NOT YO_DEBUG)
-    set(YO_DEBUG false)
-    set(YO_BUILD_TYPE release)
-else()
-    set(YO_BUILD_TYPE debug)
-endif()
-
-# Set the output directories based on the build type
-set(BUILD_DIR "${CMAKE_BINARY_DIR}/build_${YO_BUILD_TYPE}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin_${YO_BUILD_TYPE}")
-
-set(TARGET_NAME "${PROJECT_NAME}")
+set(TARGET_NAME "yaml-resolve")
 
 # Define the target executable
 add_executable(${TARGET_NAME} src/main.cpp)

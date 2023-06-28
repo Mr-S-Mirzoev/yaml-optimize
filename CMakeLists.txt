@@ -13,8 +13,6 @@ else()
     set(YO_BUILD_TYPE debug)
 endif()
 
-message("YO_DEBUG: ${YO_DEBUG}")
-
 # Set the output directories based on the build type
 set(BUILD_DIR "${CMAKE_BINARY_DIR}/build_${YO_BUILD_TYPE}")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin_${YO_BUILD_TYPE}")
