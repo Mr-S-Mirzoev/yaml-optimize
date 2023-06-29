@@ -1,4 +1,4 @@
-#include "../../src/utils/cli.hpp"
+#include "utils/cli.hpp"
 #include "resolver.hpp"
 
 #ifdef YO_DEBUG

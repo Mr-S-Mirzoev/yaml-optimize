@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../../src/debug/assert.hpp"
-#include "../../src/debug/print.hpp"
-#include "../../src/debug/throw.hpp"
+#include "debug/assert.hpp"
+#include "debug/print.hpp"
+#include "debug/throw.hpp"
 
-#include "../../src/utils/string.hpp"
+#include "utils/string.hpp"
 
 #include <fstream>
 #include <istream>
