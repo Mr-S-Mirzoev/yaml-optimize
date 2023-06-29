@@ -36,3 +36,6 @@ build
 
 # Optimized YAML files
 *.optimized
+
+# Catch logs
+Testing

@@ -1,9 +1,8 @@
-#include <gtest/gtest.h>
-#include "YamlOptimizer.h"
+#include <catch2/catch_all.hpp>
+#include "optimizer/optimizer.h"
 
-TEST(FullSubstitution, Simple) {
-  const std::string input = R"(
-- - Apple
+TEST_CASE("Full substitution - Simple") {
+    const std::string input = R"(- - Apple
   - Orange
   - Banana
 - Fruits:
@@ -25,8 +24,7 @@ TEST(FullSubstitution, Simple) {
 - SomeValue: true
 )";
 
-  const std::string expectedOutput = R"(
-- &anchor_0
+    const std::string expectedOutput = R"(- &anchor_0
   - Apple
   - Orange
   - Banana
@@ -44,16 +42,15 @@ TEST(FullSubstitution, Simple) {
 - SomeValue: true
 )";
 
-  YamlOptimizer optimizer(input);
-  optimizer.optimize();
-  std::string output = optimizer.str();
+    YamlOptimizer optimizer(input);
+    optimizer.optimize();
+    const std::string output = optimizer.str();
 
-  EXPECT_EQ(output, expectedOutput);
+    REQUIRE(output == expectedOutput);
 }
 
-TEST(FullSubstitution, MultiLevel) {
-  const std::string input = R"(
-- top_level:
+TEST_CASE("Full substitution - Multi-level") {
+    const std::string input = R"(- top_level:
     - nested:
         - - Apple
           - Orange
@@ -79,8 +76,7 @@ TEST(FullSubstitution, MultiLevel) {
 - SomeValue: true
 )";
 
-  const std::string expectedOutput = R"(
-- top_level:
+    const std::string expectedOutput = R"(- top_level:
     - nested:
         - &anchor_0
           - Apple
@@ -103,9 +99,9 @@ TEST(FullSubstitution, MultiLevel) {
 - SomeValue: true
 )";
 
-  YamlOptimizer optimizer(input);
-  optimizer.optimize();
-  std::string output = optimizer.str();
+    YamlOptimizer optimizer(input);
+    optimizer.optimize();
+    const std::string output = optimizer.str();
 
-  EXPECT_EQ(output, expectedOutput);
+    REQUIRE(output == expectedOutput);
 }

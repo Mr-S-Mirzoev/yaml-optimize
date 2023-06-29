@@ -16,7 +16,11 @@ set(LIB_NAME yaml-optimizer-lib)
 # Add optimization library as a dependency
 add_subdirectory(src)
 
-if (YO_BUILD_RESOLVER)
+if (YO_BUILD_TESTS)
+    add_subdirectory(test)
+endif(YO_BUILD_TESTS)
+
+if (YO_BUILD_TOOLS)
     # Add tools (e.g. YAML resolver)
     add_subdirectory(tools)
-endif(YO_BUILD_RESOLVER)
+endif(YO_BUILD_TOOLS)
