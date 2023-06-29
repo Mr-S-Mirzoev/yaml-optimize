@@ -1,5 +1,8 @@
-#include "optimizer/optimizer.hpp"
+#include "debug/exception.hpp"
+#include "optimizer/optimizer.h"
 #include "utils/cli.hpp"
+
+#include <fstream>
 
 #ifdef YO_DEBUG
 #pragma message ("Building debug version of optimizer")

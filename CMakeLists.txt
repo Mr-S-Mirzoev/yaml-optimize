@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(yaml-optimize)
+project(yaml-utils)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(TARGET_NAME "${PROJECT_NAME}")
+set(PROJECT_DIR ${PROJECT_SOURCE_DIR})
 
 # Add the rapidyaml library
 add_subdirectory(deps/rapidyaml)
@@ -11,17 +11,16 @@ add_subdirectory(deps/rapidyaml)
 # Add fmt library as a dependency
 add_subdirectory(deps/fmt)
 
-# Define the target executable
-add_executable(${TARGET_NAME} src/main.cpp)
+set(LIB_NAME yaml-optimizer-lib)
 
-# Link against rapidyaml library
-target_link_libraries(${TARGET_NAME} PRIVATE ryml::ryml)
-target_include_directories(${TARGET_NAME} PRIVATE deps/clara)
+# Add optimization library as a dependency
+add_subdirectory(src)
 
-target_link_libraries(${TARGET_NAME} PRIVATE fmt::fmt)
+if (YO_BUILD_TESTS)
+    add_subdirectory(test)
+endif(YO_BUILD_TESTS)
 
-# Add macro for Debug build
-target_compile_definitions(${TARGET_NAME} PRIVATE "$<$<CONFIG:Debug>:YO_DEBUG>")
-
-# Add testing utils
-add_subdirectory(test)
+if (YO_BUILD_TOOLS)
+    # Add tools (e.g. YAML resolver)
+    add_subdirectory(tools)
+endif(YO_BUILD_TOOLS)

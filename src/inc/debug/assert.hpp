@@ -1,13 +1,8 @@
 #pragma once
 
-#include <sstream>
-#include <stdexcept>
+#include "debug/exception.hpp"
 
-class YamlOptimizerError : public std::runtime_error
-{
-public:
-    YamlOptimizerError(std::string const& what) : std::runtime_error(what) {}
-};
+#include <sstream>
 
 #define DEBUG_ASSERT(condition) DEBUG_ASSERT_WITH_MSG(condition, "");
 
