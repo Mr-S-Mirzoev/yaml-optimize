@@ -1,0 +1,5 @@
+# Exclude third-parties check
+./deps
+
+# Prevent build-directory checks on CI
+./build
