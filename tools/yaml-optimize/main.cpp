@@ -5,9 +5,9 @@
 #include <fstream>
 
 #ifdef YO_DEBUG
-#pragma message ("Building debug version of optimizer")
+#pragma message("Building debug version of optimizer")
 #else
-#pragma message ("Building release version of optimizer")
+#pragma message("Building release version of optimizer")
 #endif
 
 int main(int argc, char* argv[])

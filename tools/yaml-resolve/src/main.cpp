@@ -1,10 +1,10 @@
-#include "utils/cli.hpp"
 #include "resolver.hpp"
+#include "utils/cli.hpp"
 
 #ifdef YO_DEBUG
-#pragma message ("Building debug version of resolver")
+#pragma message("Building debug version of resolver")
 #else
-#pragma message ("Building release version of resolver")
+#pragma message("Building release version of resolver")
 #endif
 
 void run(int argc, char* argv[])

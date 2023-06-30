@@ -1,7 +1,8 @@
-#include <catch2/catch_all.hpp>
 #include "optimizer/optimizer.h"
+#include <catch2/catch_all.hpp>
 
-TEST_CASE("Full substitution - Simple") {
+TEST_CASE("Full substitution - Simple")
+{
     const std::string input = R"(- - Apple
   - Orange
   - Banana
@@ -49,7 +50,8 @@ TEST_CASE("Full substitution - Simple") {
     REQUIRE(output == expectedOutput);
 }
 
-TEST_CASE("Full substitution - Multi-level") {
+TEST_CASE("Full substitution - Multi-level")
+{
     const std::string input = R"(- top_level:
     - nested:
         - - Apple
@@ -100,8 +102,8 @@ TEST_CASE("Full substitution - Multi-level") {
 )";
 
     YamlOptimizer optimizer(input, OptimizationSettings{
-        .optimization_limit = 1,
-    });
+                                       .optimization_limit = 1,
+                                   });
     optimizer.optimize();
     const std::string output = optimizer.str();
 
