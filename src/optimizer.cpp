@@ -15,7 +15,9 @@
 #include "fmt/format.h"
 #include "ryml.hpp"
 
-YamlOptimizer::YamlOptimizer(const std::string& content) : content_(content)
+YamlOptimizer::YamlOptimizer(std::string const& content, OptimizationSettings const& settings)
+    : content_(content)
+    , settings_(settings)
 {
     // Load YAML file using rapidyaml
     tree_ = ryml::parse_in_place(get_clean_content(content_));
@@ -31,8 +33,8 @@ YamlOptimizer::YamlOptimizer(const std::string& content) : content_(content)
 #endif // YO_DEBUG
 }
 
-YamlOptimizer::YamlOptimizer(std::istream& is)
-    : YamlOptimizer(get_file_content(is))
+YamlOptimizer::YamlOptimizer(std::istream& is, OptimizationSettings const& settings)
+    : YamlOptimizer(get_file_content(is), settings)
 {
 }
 
@@ -40,6 +42,13 @@ void YamlOptimizer::optimize()
 {
     for (std::size_t i = 0; i < data_.size() - 1; ++i)
     {
+        DEBUG_PRINT("i={}", i);
+        if (i >= data_.size())
+            break;
+
+        if (settings_.optimization_limit.has_value() && data_[i].size <= settings_.optimization_limit.value())
+            continue;
+
         for (std::size_t j = i + 1; j < data_.size(); ++j)
         {
             DEBUG_PRINT("i={}; j={}", i, j);
@@ -53,6 +62,9 @@ void YamlOptimizer::optimize()
                 continue;
 
             if (!a.is_map() && !a.is_seq())
+                continue;
+
+            if (settings_.optimization_limit.has_value() && data_[j].size <= settings_.optimization_limit.value())
                 continue;
                 
             if (!nodes_equal(a, b))
@@ -83,17 +95,7 @@ void YamlOptimizer::optimize()
             if (next_valid_id == ryml::NONE)
                 next_valid_id = data_.size();
 
-            ryml::csubstr key;
-            if (b.has_key())
-                key = b.key();
-
-            b.clear_children();
-            b.set_type(ryml::VALREF);
-
-            // Otherwise `key` is overwritten for some reason
-            // Most likely due to set_type.
-            b.set_key(key);
-            b.set_val_ref(anchor);
+            set_reference(b, anchor);
 
             DEBUG_PRINT("tree_.size={}", tree_.size());
 
@@ -204,7 +206,7 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a, const ryml::ConstNo
 
         if (a.num_children() != b.num_children())
         {
-            DEBUG_PRINT("Num children mismatch");
+            DEBUG_PRINT("Num children mismatch: {} vs. {}", a.num_children(), b.num_children());
             return false;
         }
 
@@ -277,6 +279,21 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
         node_size += get_info_impl(child);
 
     return node_size;
+}
+
+void YamlOptimizer::set_reference(ryml::NodeRef& node, ryml::csubstr anchor)
+{
+    ryml::csubstr key;
+    if (node.has_key())
+        key = node.key();
+
+    node.clear_children();
+    node.set_type(ryml::VALREF);
+
+    // Otherwise `key` is overwritten for some reason
+    // Most likely due to set_type.
+    node.set_key(key);
+    node.set_val_ref(anchor);
 }
 
 #ifdef YO_DEBUG

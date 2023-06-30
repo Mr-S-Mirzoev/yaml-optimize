@@ -6,15 +6,18 @@ set(CMAKE_CXX_STANDARD 20)
 Include(FetchContent)
 
 FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.0.1 # or a later release
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.0.1 # or a later release
 )
 
 FetchContent_MakeAvailable(Catch2)
 
 # Define the target for unit tests
-add_executable(unittest src/full.unittest.cpp)
+add_executable(unittest
+    src/full.unittest.cpp
+    src/limit.unittest.cpp
+)
 
 # Link against Catch2
 target_link_libraries(unittest PRIVATE Catch2::Catch2WithMain ${LIB_NAME})

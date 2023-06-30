@@ -1,0 +1,41 @@
+Nodes:
+  A:
+    B: C
+    D:
+      - E: F
+        G: H
+      - E: F
+        G: I
+      - E: F
+        G: J
+  B:
+    C: D
+    E:
+      - F: G
+        H: I
+      - F: G
+        H: J
+      - F: G
+        H: K
+  C:
+    B: C
+    D:
+      - E: F
+        G: H
+      - E: F
+        G: I
+      - E: F
+        G: J
+  D:
+    E:
+      - F: G
+        H: I
+      - F: G
+        H: J
+      - F: G
+        H: K
+    B: C
+  E:
+    F: G
+    H: I
+    I: J

@@ -99,7 +99,9 @@ TEST_CASE("Full substitution - Multi-level") {
 - SomeValue: true
 )";
 
-    YamlOptimizer optimizer(input);
+    YamlOptimizer optimizer(input, OptimizationSettings{
+        .optimization_limit = 1,
+    });
     optimizer.optimize();
     const std::string output = optimizer.str();
 

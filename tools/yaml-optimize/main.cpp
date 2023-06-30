@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 
         std::ifstream is(args.in_fname);
 
-        YamlOptimizer optimizer(is);
+        YamlOptimizer optimizer(is, args.settings);
 
         optimizer.optimize();
 

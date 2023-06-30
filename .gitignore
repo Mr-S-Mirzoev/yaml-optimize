@@ -39,3 +39,6 @@ build
 
 # Catch logs
 Testing
+
+# VSCode local settings
+.vscode
