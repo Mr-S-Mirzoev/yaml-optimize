@@ -15,9 +15,9 @@
 #include "fmt/format.h"
 #include "ryml.hpp"
 
-YamlOptimizer::YamlOptimizer(std::string const& content, OptimizationSettings const& settings)
-    : content_(content)
-    , settings_(settings)
+YamlOptimizer::YamlOptimizer(std::string const& content,
+                             OptimizationSettings const& settings)
+    : content_(content), settings_(settings)
 {
     // Load YAML file using rapidyaml
     tree_ = ryml::parse_in_place(get_clean_content(content_));
@@ -33,7 +33,8 @@ YamlOptimizer::YamlOptimizer(std::string const& content, OptimizationSettings co
 #endif // YO_DEBUG
 }
 
-YamlOptimizer::YamlOptimizer(std::istream& is, OptimizationSettings const& settings)
+YamlOptimizer::YamlOptimizer(std::istream& is,
+                             OptimizationSettings const& settings)
     : YamlOptimizer(get_file_content(is), settings)
 {
 }
@@ -46,7 +47,8 @@ void YamlOptimizer::optimize()
         if (i >= data_.size())
             break;
 
-        if (settings_.optimization_limit.has_value() && data_[i].size <= settings_.optimization_limit.value())
+        if (settings_.optimization_limit.has_value() &&
+            data_[i].size <= settings_.optimization_limit.value())
             continue;
 
         for (std::size_t j = i + 1; j < data_.size(); ++j)
@@ -64,9 +66,10 @@ void YamlOptimizer::optimize()
             if (!a.is_map() && !a.is_seq())
                 continue;
 
-            if (settings_.optimization_limit.has_value() && data_[j].size <= settings_.optimization_limit.value())
+            if (settings_.optimization_limit.has_value() &&
+                data_[j].size <= settings_.optimization_limit.value())
                 continue;
-                
+
             if (!nodes_equal(a, b))
             {
 #ifdef YO_DEBUG
@@ -85,7 +88,8 @@ void YamlOptimizer::optimize()
             else
             {
                 auto anchor_str = fmt::format("anchor_{}", anchor_count_++);
-                anchor = tree_.copy_to_arena({anchor_str.data(), anchor_str.size()});
+                anchor =
+                    tree_.copy_to_arena({anchor_str.data(), anchor_str.size()});
                 a.set_val_anchor(anchor);
             }
 
@@ -105,7 +109,8 @@ void YamlOptimizer::optimize()
             DEBUG_PRINT("next_valid_id={}; b.id = {}", next_valid_id, b.id());
 
             // Erase the redundant nodes from the data vector
-            data_.erase(data_.begin() + b.id() + 1, data_.begin() + next_valid_id);
+            data_.erase(data_.begin() + b.id() + 1,
+                        data_.begin() + next_valid_id);
             DEBUG_PRINT("data_.size={}", data_.size());
         }
     }
@@ -127,17 +132,16 @@ void YamlOptimizer::dump(std::string const& filename)
     std::ofstream of(filename);
 
     if (!of.good())
-        YO_THROW(YamlOptimizerError, "Failed to create output file with name {}", filename);
+        YO_THROW(YamlOptimizerError,
+                 "Failed to create output file with name {}", filename);
 
     write_to_ostream(of);
 }
 
-void YamlOptimizer::get_info()
-{
-    get_info_impl(tree_.rootref());
-}
+void YamlOptimizer::get_info() { get_info_impl(tree_.rootref()); }
 
-bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a, const ryml::ConstNodeRef& b) const
+bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a,
+                                     const ryml::ConstNodeRef& b) const
 {
     if (a.is_map())
         return b.is_map();
@@ -154,11 +158,13 @@ bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a, const ryml::Co
     return false;
 }
 
-bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a, const ryml::ConstNodeRef& b) const
+bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
+                                const ryml::ConstNodeRef& b) const
 {
     if (data_[a.id()].size != data_[b.id()].size)
     {
-        DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size, data_[b.id()].size);
+        DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size,
+                    data_[b.id()].size);
         return false;
     }
 
@@ -206,13 +212,13 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a, const ryml::ConstNo
 
         if (a.num_children() != b.num_children())
         {
-            DEBUG_PRINT("Num children mismatch: {} vs. {}", a.num_children(), b.num_children());
+            DEBUG_PRINT("Num children mismatch: {} vs. {}", a.num_children(),
+                        b.num_children());
             return false;
         }
 
         for (auto a_it = a.begin(), b_it = b.begin();
-                a_it != a.end() && b_it != b.end();
-                ++a_it, ++b_it)
+             a_it != a.end() && b_it != b.end(); ++a_it, ++b_it)
         {
             if (!nodes_equal(*a_it, *b_it))
             {
@@ -261,7 +267,8 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 {
     // Store the size of the current node in the data vector
     std::size_t nodeId{node.id()};
-    DEBUG_ASSERT_WITH_MSG(nodeId < data_.size(), "Node id must never exceed nodes count");
+    DEBUG_ASSERT_WITH_MSG(nodeId < data_.size(),
+                          "Node id must never exceed nodes count");
 
     auto& node_size = data_[nodeId].size;
 
