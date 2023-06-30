@@ -48,7 +48,8 @@ public:
         std::ofstream of(filename);
 
         if (!of.good())
-            YO_THROW(YamlResolverError, "Failed to create output file with name {}", filename);
+            YO_THROW(YamlResolverError,
+                     "Failed to create output file with name {}", filename);
 
         write_to_ostream(of);
     }

@@ -12,8 +12,9 @@
         if (!(condition))                                                      \
         {                                                                      \
             std::ostringstream oss;                                            \
-            oss << "Assertion failed: " description                            \
-                   " in file "  __FILE__ " at line " << __LINE__;              \
+            oss << "Assertion failed: " description " in file " __FILE__       \
+                   " at line "                                                 \
+                << __LINE__;                                                   \
             throw YamlOptimizerError(oss.str());                               \
         }                                                                      \
     } while (false);

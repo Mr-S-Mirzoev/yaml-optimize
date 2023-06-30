@@ -18,8 +18,10 @@ class YamlOptimizer
 
 public:
     // Constructor
-    explicit YamlOptimizer(std::string const& content, OptimizationSettings const& settings = {});
-    explicit YamlOptimizer(std::istream& is, OptimizationSettings const& settings = {});
+    explicit YamlOptimizer(std::string const& content,
+                           OptimizationSettings const& settings = {});
+    explicit YamlOptimizer(std::istream& is,
+                           OptimizationSettings const& settings = {});
 
     // Function to optimize the YAML configuration
     void optimize();
@@ -42,8 +44,10 @@ private:
     void get_info();
     std::size_t get_info_impl(ryml::ConstNodeRef const& node);
 
-    bool nodes_equal(ryml::ConstNodeRef const& a, ryml::ConstNodeRef const& b) const;
-    bool long_types_equal(ryml::ConstNodeRef const& a, ryml::ConstNodeRef const& b) const;
+    bool nodes_equal(ryml::ConstNodeRef const& a,
+                     ryml::ConstNodeRef const& b) const;
+    bool long_types_equal(ryml::ConstNodeRef const& a,
+                          ryml::ConstNodeRef const& b) const;
 
     void write_to_ostream(std::ostream& os) const;
 
