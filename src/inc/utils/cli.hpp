@@ -1,18 +1,21 @@
 #pragma once
 
 #include "../debug/throw.hpp"
+#include "../optimizer/settings.h"
 
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 
+#define CLARA_CONFIG_OPTIONAL_TYPE std::optional
 #include "clara.hpp"
 
 namespace cli
 {
 struct Args
 {
+    OptimizationSettings settings;
     std::string app_name;
     std::string in_fname;
     std::string out_fname;
@@ -30,6 +33,8 @@ bool parse(int argc, char* argv[], Args& args)
 {
     auto cli =
         clara::Help(args.show_help) |
+        clara::Opt(args.settings.optimization_limit, "optimization limit")["-l"]["--limit"](
+            "limit to when to stop optimization") |
         clara::Opt(args.in_fname,
                    "input")["-i"]["--input"]("path to input file") |
         clara::Opt(args.out_fname, "output")["-o"]["--output"](
