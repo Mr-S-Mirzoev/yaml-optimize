@@ -11,7 +11,7 @@
 #define CLARA_CONFIG_OPTIONAL_TYPE std::optional
 #include "clara.hpp"
 
-namespace cli
+namespace cli_utils
 {
 struct Args
 {
@@ -75,4 +75,4 @@ bool parse(int argc, char* argv[], Args& args)
     return true;
 }
 
-} // namespace cli
+} // namespace cli_utils

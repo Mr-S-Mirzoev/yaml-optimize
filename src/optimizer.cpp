@@ -4,6 +4,8 @@
 #include "debug/print.hpp"
 #include "debug/throw.hpp"
 
+#include "utils/io.hpp"
+#include "utils/node.hpp"
 #include "utils/string.hpp"
 
 #include <fstream>
@@ -35,7 +37,7 @@ YamlOptimizer::YamlOptimizer(std::string const& content,
 
 YamlOptimizer::YamlOptimizer(std::istream& is,
                              OptimizationSettings const& settings)
-    : YamlOptimizer(get_file_content(is), settings)
+    : YamlOptimizer(io_utils::get_file_content(is), settings)
 {
 }
 
@@ -72,11 +74,11 @@ void YamlOptimizer::optimize()
 
             if (!nodes_equal(a, b))
             {
-#ifdef YO_DEBUG
-                std::cout << a << std::endl << std::endl;
-                std::cout << b << std::endl << std::endl;
-                std::cout << std::endl << std::endl;
-#endif // YO_DEBUG
+                DEBUG_PRINT(
+                    "Diff nodes: \nlhs:\n\"\"\"\n{}\"\"\"\n  "
+                    "\nrhs:\n\"\"\"\n{}\"\"\"\n  \ndiff:\n\"\"\"\n{}\"\"\"\n",
+                    node_utils::to_string(a), node_utils::to_string(b),
+                    node_utils::NodeDiff(a, b).str());
                 continue;
             }
 
@@ -99,7 +101,7 @@ void YamlOptimizer::optimize()
             if (next_valid_id == ryml::NONE)
                 next_valid_id = data_.size();
 
-            set_reference(b, anchor);
+            node_utils::set_reference(b, anchor);
 
             DEBUG_PRINT("tree_.size={}", tree_.size());
 
@@ -249,20 +251,6 @@ ryml::substr YamlOptimizer::get_clean_content(std::string& content)
     return {content.data() + offset, content.length() - offset};
 }
 
-std::string YamlOptimizer::get_file_content(std::istream& is)
-{
-    std::string out;
-
-    is.seekg(0, std::ios::end);
-    out.reserve(static_cast<std::string::size_type>(is.tellg()));
-    is.seekg(0, std::ios::beg);
-
-    using IterType = std::istreambuf_iterator<char>;
-    out.assign(IterType(is), IterType());
-
-    return out;
-}
-
 std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 {
     // Store the size of the current node in the data vector
@@ -286,21 +274,6 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
         node_size += get_info_impl(child);
 
     return node_size;
-}
-
-void YamlOptimizer::set_reference(ryml::NodeRef& node, ryml::csubstr anchor)
-{
-    ryml::csubstr key;
-    if (node.has_key())
-        key = node.key();
-
-    node.clear_children();
-    node.set_type(ryml::VALREF);
-
-    // Otherwise `key` is overwritten for some reason
-    // Most likely due to set_type.
-    node.set_key(key);
-    node.set_val_ref(anchor);
 }
 
 #ifdef YO_DEBUG
