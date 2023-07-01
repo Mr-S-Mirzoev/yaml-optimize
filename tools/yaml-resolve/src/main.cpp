@@ -1,5 +1,5 @@
+#include "cli.hpp"
 #include "resolver.hpp"
-#include "utils/cli.hpp"
 
 #ifdef YO_DEBUG
 #pragma message("Building debug version of resolver")
@@ -9,8 +9,8 @@
 
 void run(int argc, char* argv[])
 {
-    cli::Args args{};
-    if (!cli::parse(argc, argv, args))
+    cli_utils::Args args{};
+    if (!cli_utils::parse(argc, argv, args))
         exit(0);
 
     std::ifstream is(args.in_fname);
@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
     {
         run(argc, argv);
     }
-    catch (const cli::ArgParseError& e)
+    catch (const cli_utils::ArgParseError& e)
     {
         std::cerr << fmt::format("Error during CLI args parsing occured: {}",
                                  e.what())

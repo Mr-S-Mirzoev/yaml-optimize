@@ -2,6 +2,8 @@
 #include "optimizer/optimizer.h"
 #include "utils/cli.hpp"
 
+#include <fmt/format.h>
+
 #include <fstream>
 
 #ifdef YO_DEBUG
@@ -14,8 +16,8 @@ int main(int argc, char* argv[])
 {
     try
     {
-        cli::Args args{};
-        if (!cli::parse(argc, argv, args))
+        cli_utils::Args args{};
+        if (!cli_utils::parse(argc, argv, args))
             return 0;
 
         std::ifstream is(args.in_fname);
@@ -26,7 +28,7 @@ int main(int argc, char* argv[])
 
         optimizer.dump(args.out_fname);
     }
-    catch (const cli::ArgParseError& e)
+    catch (const cli_utils::ArgParseError& e)
     {
         std::cerr << fmt::format("Error during CLI args parsing occured: {}",
                                  e.what())

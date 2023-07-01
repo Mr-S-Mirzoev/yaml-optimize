@@ -4,7 +4,7 @@ target_include_directories(${LIB_NAME} PUBLIC inc)
 
 # Link against rapidyaml library
 target_link_libraries(${LIB_NAME} PUBLIC ryml::ryml)
-target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_DIR}/deps/clara)
+target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_DIR}/deps/Lyra/include)
 
 target_link_libraries(${LIB_NAME} PUBLIC fmt::fmt)
 

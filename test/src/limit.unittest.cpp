@@ -49,7 +49,7 @@ TEST_CASE("Optimization Limit - Simple 2..5")
 
     std::string const& expectedOutput = input;
 
-    for (int i : std::views::iota(2, 6))
+    for (int i = 2; i < 6; ++i)
     {
         YamlOptimizer optimizer(input, OptimizationSettings{
                                            .optimization_limit = i,
@@ -135,7 +135,7 @@ TEST_CASE("Optimization Limit - Branchy 1..5")
     I: J
 )";
 
-    for (int i : std::views::iota(1, 6))
+    for (int i = 1; i < 6; ++i)
     {
         YamlOptimizer optimizer(input, OptimizationSettings{
                                            .optimization_limit = i,
@@ -283,7 +283,7 @@ TEST_CASE("Optimization Limit - Branchy 7..10")
 
     const std::string& expectedOutput = input;
 
-    for (int i : std::views::iota(7, 11))
+    for (int i = 7; i < 11; ++i)
     {
         YamlOptimizer optimizer(input, OptimizationSettings{
                                            .optimization_limit = i,

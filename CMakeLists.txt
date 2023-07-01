@@ -5,11 +5,11 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(PROJECT_DIR ${PROJECT_SOURCE_DIR})
 
-# Add the rapidyaml library
-add_subdirectory(deps/rapidyaml)
-
-# Add fmt library as a dependency
+# Add the fmt library for fast string formatting
 add_subdirectory(deps/fmt)
+
+# Add the RapidYaml library for fast YAML processing
+add_subdirectory(deps/rapidyaml)
 
 set(LIB_NAME yaml-optimizer-lib)
 
