@@ -35,8 +35,8 @@ bool parse(int argc, char* argv[], Args& args)
             .description(
                 "YAML Optimizer - A tool for optimizing YAML configurations "
                 "with the use of anchors, references and merge keys") |
-        lyra::opt(optimization_limit, "optimization limit")["-l"]["--limit"](
-            "limit to when to stop optimization")
+        lyra::opt(optimization_limit, "optimisation limit")["-l"]["--limit"](
+            "limit to when to stop optimisation")
             .optional()
             .choices(
                 [](int optimization_limit)
