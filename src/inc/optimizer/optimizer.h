@@ -8,27 +8,53 @@
 
 #include "ryml.hpp"
 
+/**
+ * @brief The YamlOptimizer class performs optimization on a YAML configuration.
+ *
+ * It optimizes the configuration by identifying similar nodes and replacing
+ * them with anchors and references.
+ */
 class YamlOptimizer
 {
-    // NodeInfo struct to store node information
-    struct NodeInfo
-    {
-        std::size_t size;
-    };
-
 public:
-    // Constructor
+    /**
+     * @brief Constructs a YamlOptimizer object from a YAML string.
+     *
+     * @param content The YAML string to optimize.
+     * @param settings The optimization settings to use.
+     */
     explicit YamlOptimizer(std::string const& content,
                            OptimizationSettings const& settings = {});
+
+    /**
+     * @brief Constructs a YamlOptimizer object from an input stream.
+     *
+     * @param is The input stream containing the YAML content to optimize.
+     * @param settings The optimization settings to use.
+     */
     explicit YamlOptimizer(std::istream& is,
                            OptimizationSettings const& settings = {});
 
-    // Function to optimize the YAML configuration
+    /**
+     * @brief Performs optimization on the YAML configuration.
+     *
+     * It identifies similar nodes and replaces them with anchors and
+     * references.
+     */
     void optimize();
 
-    // Function to retrieve the currently stored YAML string
+    /**
+     * @brief Returns the currently stored YAML string.
+     *
+     * @return The optimized YAML string.
+     */
     std::string str() const;
 
+    /**
+     * @brief Writes the currently stored YAML string to a file.
+     *
+     * @param filename The name of the file to write the YAML string to.
+     */
     void dump(std::string const& filename);
 
     // Input data
@@ -42,6 +68,12 @@ private:
 
     // Processed data
 private:
+    // NodeInfo struct to store node information
+    struct NodeInfo
+    {
+        std::size_t size;
+    };
+
     std::vector<NodeInfo> data_;
     ryml::Tree tree_;
     std::size_t anchor_count_ = 0;

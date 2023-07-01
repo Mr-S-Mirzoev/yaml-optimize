@@ -12,6 +12,6 @@ The aim of the project is to provide a fast and convenient way to optimize large
 
 ## Roadmap
 
-[+] Replace absolutely identical blocks with anchors to the first one
-[ ] Replace similar blocks with merge keys
-[ ] Preserve comments and spacing (?) of the original document. Also, preserve block/flow format.
+- [x] Replace absolutely identical blocks with anchors to the first one
+- [ ] Replace similar blocks with merge keys
+- [ ] Preserve comments and spacing (?) of the original document. Also, preserve block/flow format.
