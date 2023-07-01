@@ -1,24 +1,24 @@
 # yaml-optimize
 
-Yaml optimiser is a command-line tool written in C++ that optimises large YAML configurations using aliases (anchors), references, and merge keys (overrides). It leverages the rapidyaml library for YAML parsing and manipulation.
+Yaml optimiser is a library and set of command-line tools written in C++. The library help with optimisation of large YAML configurations using aliases (anchors), references, and merge keys (overrides). It leverages the rapidyaml library for YAML parsing and manipulation.
 
-The aim of the project is to provide a fast and convenient way to optimize large YAML configurations.
+The project aims to provide a fast and convenient way to optimise large YAML configurations.
 
 ## Dependencies
 
 - [rapidyaml](https://github.com/biojppm/rapidyaml): A fast YAML parser and emitter for C++.
-- [Lyra](https://github.com/bfgroup/Lyra.git): A simple to use, composing, header only, command line arguments parser for C++ 11 and beyond.
+- [Lyra](https://github.com/bfgroup/Lyra.git): A simple-to-use, composing, header-only, command line arguments parser for C++ 11 and beyond.
 - [fmt](https://github.com/fmtlib/fmt): A formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
 
 ## Roadmap
 
-- [x] Replace absolutely identical blocks with anchors to the first one
+- [x] Replace identical blocks with anchors to the first one
 - [ ] Replace similar blocks with merge keys
 - [ ] Preserve comments and spacing (?) of the original document. Also, preserve block/flow format.
 
 ## Installation
 
-Installation is fairly easy. First of all, clone the repo, downloading it's submodules recursively:
+Installation is fairly easy. First of all, clone the repo, downloading its submodules recursively:
 
 ```bash
 git clone https://github.com/Mr-S-Mirzoev/yaml-optimize.git --recursive
@@ -36,18 +36,18 @@ Next, in the repo directory, generate the project with CMake:
 cmake -B build -DYO_BUILD_TOOLS=1 -DYO_BUILD_TESTS=1 -DCMAKE_BUILD_TYPE=Release
 ```
 
-Here you see the flags, that can be used when building `yaml-optimize` library. `YO_BUILD_TOOLS` and `YO_BUILD_TESTS` are 0 by default, as I want the build to be minimal. If you tick the `YO_BUILD_TOOLS` option, tools `yaml-optimize` and `yaml-resolve` are built:
+Here you see the flags that can be used when building the yaml-optimize library. YO_BUILD_TOOLS and YO_BUILD_TESTS are 0 by default, as I want the build to be minimal. If you tick the YO_BUILD_TOOLS option, tools yaml-optimize, and yaml-resolve are built:
 
 ```
 USAGE:
   yaml-optimize [-?|-h|--help] [-l|--limit <optimization limit>] -i|--input <input> [-o|--output <output>] [-v|--verbose]
 
-YAML Optimizer - A tool for optimizing YAML configurations with the use of anchors, references and merge keys
+YAML Optimizer - A tool for optimising YAML configurations with the use of anchors, references and merge keys
 
 OPTIONS, ARGUMENTS:
   -?, -h, --help          
   -l, --limit <optimization limit>
-                          limit to when to stop optimization
+                          limit to when to stop optimisation
   -i, --input <input>     path to input file
   -o, --output <output>   path to output file (defaults to input filename + ".optimized")
   -v, --verbose           enable verbose mode
@@ -58,7 +58,7 @@ OPTIONS, ARGUMENTS:
 USAGE:
   yaml-resolve [-?|-h|--help] -i|--input <input> [-o|--output <output>] [-v|--verbose]
 
-YAML Resolver - A tool for resolving YAML optimized configurations with anchors, references and merge keys, resolving them into full YAML configuration
+YAML Resolver - A tool for resolving YAML optimised configurations with anchors, references, and merge keys, substituting them to obtain the complete YAML configuration
 
 OPTIONS, ARGUMENTS:
   -?, -h, --help          
