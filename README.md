@@ -1,6 +1,6 @@
 # yaml-optimize
 
-Yaml optimiser is a library and set of command-line tools written in C++. The library help with optimisation of large YAML configurations using aliases (anchors), references, and merge keys (overrides). It leverages the rapidyaml library for YAML parsing and manipulation.
+Yaml optimiser is a library and set of command-line tools written in C++. The library helps optimise large YAML configurations using aliases (anchors), references, and merge keys (overrides). It leverages the rapidyaml library for YAML parsing and manipulation.
 
 The project aims to provide a fast and convenient way to optimise large YAML configurations.
 
@@ -14,7 +14,7 @@ The project aims to provide a fast and convenient way to optimise large YAML con
 
 - [x] Replace identical blocks with anchors to the first one
 - [ ] Replace similar blocks with merge keys
-- [ ] Preserve comments and spacing (?) of the original document. Also, preserve block/flow format.
+- [ ] Preserve the original document's comments and spacing (?). Also, preserve block/flow format.
 
 ## Installation
 
