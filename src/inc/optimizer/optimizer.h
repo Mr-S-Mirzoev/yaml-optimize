@@ -8,6 +8,8 @@
 
 #include "ryml.hpp"
 
+#define NAMED_PRIVATE_SECTION(name) private:
+
 /**
  * @brief The YamlOptimizer class performs optimization on a YAML configuration.
  *
@@ -53,12 +55,12 @@ public:
     /**
      * @brief Writes the currently stored YAML string to a file.
      *
-     * @param filename The name of the file to write the YAML string to.
+     * @param filename The file name to which to write the YAML string.
      */
     void dump(std::string const& filename);
 
-    // Input data
-private:
+    NAMED_PRIVATE_SECTION(Input data)
+
     const OptimizationSettings settings_;
 
     std::string content_;
@@ -66,9 +68,8 @@ private:
     static constexpr std::string_view BOM{"\xEF\xBB\xBF"};
     bool is_utf8 = false;
 
-    // Processed data
-private:
-    // NodeInfo struct to store node information
+    NAMED_PRIVATE_SECTION(Processed data)
+
     struct NodeInfo
     {
         std::size_t size;
@@ -78,26 +79,27 @@ private:
     ryml::Tree tree_;
     std::size_t anchor_count_ = 0;
 
-    // Tree pre-processing utils
-private:
+    NAMED_PRIVATE_SECTION(Tree pre - processing utils)
+
     void get_info();
     std::size_t get_info_impl(ryml::ConstNodeRef const& node);
 
-    // Node utils
-private:
+    NAMED_PRIVATE_SECTION(Node utils)
+
     bool nodes_equal(ryml::ConstNodeRef const& a,
                      ryml::ConstNodeRef const& b) const;
     bool long_types_equal(ryml::ConstNodeRef const& a,
                           ryml::ConstNodeRef const& b) const;
 
-    // IO utils
-private:
+    NAMED_PRIVATE_SECTION(IO utils)
+
     void write_to_ostream(std::ostream& os) const;
     ryml::substr get_clean_content(std::string& content);
 
 #ifdef YO_DEBUG
-    // Debug utils
-private:
+    NAMED_PRIVATE_SECTION(Debug utils)
+
     void debug_print_data() const;
+
 #endif // YO_DEBUG
 };
