@@ -2,6 +2,8 @@
 #include "optimizer/optimizer.h"
 #include "utils/cli.hpp"
 
+#include <fmt/format.h>
+
 #include <fstream>
 
 #ifdef YO_DEBUG

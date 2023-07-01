@@ -1,5 +1,5 @@
+#include "cli.hpp"
 #include "resolver.hpp"
-#include "utils/cli.hpp"
 
 #ifdef YO_DEBUG
 #pragma message("Building debug version of resolver")
