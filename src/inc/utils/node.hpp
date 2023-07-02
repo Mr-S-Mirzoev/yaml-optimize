@@ -22,7 +22,8 @@ void set_reference(ryml::NodeRef& node, ryml::csubstr anchor)
     node.set_val_ref(anchor);
 }
 
-std::size_t get_next_valid_id_after_content_removal(ryml::NodeRef node, std::size_t max_possible_id)
+std::size_t get_next_valid_id_after_content_removal(ryml::NodeRef node,
+                                                    std::size_t max_possible_id)
 {
     std::size_t next_valid_id = ryml::NONE;
 
