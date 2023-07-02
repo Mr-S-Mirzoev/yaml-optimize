@@ -45,7 +45,7 @@ void YamlOptimizer::optimize()
 {
     for (std::size_t i = 0; i < data_.size() - 1; ++i)
     {
-        DEBUG_PRINT("i={}", i);
+        YO_DEBUG_PRINT("i={}", i);
         if (i >= data_.size())
             break;
 
@@ -55,7 +55,13 @@ void YamlOptimizer::optimize()
 
         for (std::size_t j = i + 1; j < data_.size(); ++j)
         {
-            DEBUG_PRINT("i={}; j={}", i, j);
+            YO_DEBUG_PRINT("i={}; j={}", i, j);
+            if (data_.size() != tree_.size())
+                YO_DEBUG_ASSERT_WITH_MSG(
+                    data_.size() == tree_.size(),
+                    "Node count must be solvent at all times: {} != {}",
+                    data_.size(), tree_.size());
+
             if (i >= data_.size() || j >= data_.size())
                 break;
 
@@ -74,7 +80,7 @@ void YamlOptimizer::optimize()
 
             if (!nodes_equal(a, b))
             {
-                DEBUG_PRINT(
+                YO_DEBUG_PRINT(
                     "Diff nodes: \nlhs:\n\"\"\"\n{}\"\"\"\n  "
                     "\nrhs:\n\"\"\"\n{}\"\"\"\n  \ndiff:\n\"\"\"\n{}\"\"\"\n",
                     node_utils::to_string(a), node_utils::to_string(b),
@@ -95,25 +101,21 @@ void YamlOptimizer::optimize()
                 a.set_val_anchor(anchor);
             }
 
-            auto next_valid_id = b.next_sibling().id();
-            if (next_valid_id == ryml::NONE && b.has_parent())
-                next_valid_id = b.parent().next_sibling().id();
-            if (next_valid_id == ryml::NONE)
-                next_valid_id = data_.size();
+            auto next_valid_id =
+                node_utils::get_next_valid_id_after_content_removal(
+                    b, data_.size());
 
             node_utils::set_reference(b, anchor);
-
-            DEBUG_PRINT("tree_.size={}", tree_.size());
 
             // Reorder the tree nodes (fix indexes to match [0 .. sz - 1] range)
             tree_.reorder();
 
-            DEBUG_PRINT("next_valid_id={}; b.id = {}", next_valid_id, b.id());
+            YO_DEBUG_PRINT("Removing elements from {} to {}. Removing: \n{}\n",
+                           b.id() + 1, next_valid_id, node_utils::to_string(a));
 
             // Erase the redundant nodes from the data vector
             data_.erase(data_.begin() + b.id() + 1,
                         data_.begin() + next_valid_id);
-            DEBUG_PRINT("data_.size={}", data_.size());
         }
     }
 
@@ -165,14 +167,14 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
 {
     if (data_[a.id()].size != data_[b.id()].size)
     {
-        DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size,
-                    data_[b.id()].size);
+        YO_DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size,
+                       data_[b.id()].size);
         return false;
     }
 
     if (a.type() != b.type())
     {
-        DEBUG_PRINT("Type mismatch: {} vs {}", a.type_str(), b.type_str());
+        YO_DEBUG_PRINT("Type mismatch: {} vs {}", a.type_str(), b.type_str());
 
         if (!long_types_equal(a, b))
             return false;
@@ -182,25 +184,25 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
     {
         if (a.has_key() && a.key() != b.key())
         {
-            DEBUG_PRINT("Key mismatch");
+            YO_DEBUG_PRINT("Key mismatch");
             return false;
         }
 
         if (a.val() != b.val())
         {
-            DEBUG_PRINT("Val mismatch");
+            YO_DEBUG_PRINT("Val mismatch");
             return false;
         }
 
         if (a.has_val_tag() != b.has_val_tag())
         {
-            DEBUG_PRINT("Val tag mismatch 1");
+            YO_DEBUG_PRINT("Val tag mismatch 1");
             return false;
         }
 
         if (a.has_val_tag() && a.val_tag() != b.val_tag())
         {
-            DEBUG_PRINT("Val tag mismatch 2");
+            YO_DEBUG_PRINT("Val tag mismatch 2");
             return false;
         }
     }
@@ -208,14 +210,14 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
     {
         if (a.has_children() != b.has_children())
         {
-            DEBUG_PRINT("No child mismatch");
+            YO_DEBUG_PRINT("No child mismatch");
             return false;
         }
 
         if (a.num_children() != b.num_children())
         {
-            DEBUG_PRINT("Num children mismatch: {} vs. {}", a.num_children(),
-                        b.num_children());
+            YO_DEBUG_PRINT("Num children mismatch: {} vs. {}", a.num_children(),
+                           b.num_children());
             return false;
         }
 
@@ -224,7 +226,7 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
         {
             if (!nodes_equal(*a_it, *b_it))
             {
-                DEBUG_PRINT("Child mismatch");
+                YO_DEBUG_PRINT("Child mismatch");
                 return false;
             }
         }
@@ -255,8 +257,8 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 {
     // Store the size of the current node in the data vector
     std::size_t nodeId{node.id()};
-    DEBUG_ASSERT_WITH_MSG(nodeId < data_.size(),
-                          "Node id must never exceed nodes count");
+    YO_DEBUG_ASSERT_WITH_MSG(nodeId < data_.size(),
+                             "Node id must never exceed nodes count");
 
     auto& node_size = data_[nodeId].size;
 
@@ -287,7 +289,7 @@ void YamlOptimizer::debug_print_data() const
         std::string val;
         if (tree_.ref(i).has_val())
             val = {tree_.ref(i).val().data(), tree_.ref(i).val().size()};
-        DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
+        YO_DEBUG_PRINT("{}({} -> {}) : {}", i, key, val, data_[i].size);
     }
 }
 #endif // YO_DEBUG

@@ -22,6 +22,29 @@ void set_reference(ryml::NodeRef& node, ryml::csubstr anchor)
     node.set_val_ref(anchor);
 }
 
+std::size_t get_next_valid_id_after_content_removal(ryml::NodeRef node, std::size_t max_possible_id)
+{
+    std::size_t next_valid_id = ryml::NONE;
+
+    while (next_valid_id == ryml::NONE && node.has_parent())
+    {
+        if (node == node.last_sibling())
+        {
+            node = node.parent();
+        }
+        else
+        {
+            next_valid_id = node.next_sibling().id();
+            break;
+        }
+    }
+
+    if (next_valid_id == ryml::NONE)
+        next_valid_id = max_possible_id;
+
+    return next_valid_id;
+}
+
 std::string to_string(const ryml::ConstNodeRef& node)
 {
     std::ostringstream oss;

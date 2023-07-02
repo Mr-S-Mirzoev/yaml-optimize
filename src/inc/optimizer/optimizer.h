@@ -59,6 +59,7 @@ public:
      */
     void dump(std::string const& filename);
 
+private:
     NAMED_PRIVATE_SECTION(Input data)
 
     const OptimizationSettings settings_;

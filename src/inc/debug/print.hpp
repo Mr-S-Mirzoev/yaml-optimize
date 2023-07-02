@@ -2,13 +2,13 @@
 
 #ifndef YO_DEBUG
 
-#define DEBUG_PRINT(...)
+#define YO_DEBUG_PRINT(...)
 
 #else
 
 #include <fmt/format.h>
 
-#define DEBUG_PRINT(message, ...)                                              \
+#define YO_DEBUG_PRINT(message, ...)                                              \
     fmt::print("[DEBUG] " message "\n", ##__VA_ARGS__)
 
 #endif // YO_DEBUG
