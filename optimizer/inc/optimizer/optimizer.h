@@ -75,6 +75,7 @@ NAMED_PRIVATE_SECTION(Processed data)
     struct NodeInfo
     {
         std::size_t size;
+        std::size_t hash;
     };
 
     std::vector<NodeInfo> data_;

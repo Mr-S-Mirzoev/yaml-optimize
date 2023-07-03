@@ -26,4 +26,10 @@ public:
     friend std::ostream& operator<<(std::ostream& os, NodeDiff const& diff);
 };
 
+// Hash function for c4::yml::ConstNodeRef
+struct RapidYamlNodeHash
+{
+    std::size_t operator()(const ryml::ConstNodeRef& node) const;
+};
+
 } // namespace node_utils

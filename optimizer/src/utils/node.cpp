@@ -1,6 +1,7 @@
 #include "utils/node.h"
 #include "utils/string.h"
 
+#include <functional>
 #include <sstream>
 #include <string>
 
@@ -73,6 +74,48 @@ std::ostream& operator<<(std::ostream& os, NodeDiff const& diff)
     os << string_utils::StringDiff(str_lhs, str_rhs);
 
     return os;
+}
+
+std::size_t
+RapidYamlNodeHash::operator()(const c4::yml::ConstNodeRef& node) const
+{
+    std::size_t seed = 0;
+    std::size_t type = 0;
+
+    if (node.is_map())
+    {
+        for (auto it = node.begin(); it != node.end(); ++it)
+        {
+            auto child = it.m_tree->ref(it.m_child_id);
+            seed ^= RapidYamlNodeHash{}(child);
+        }
+
+        type = 1 << 0;
+    }
+    else if (node.is_seq())
+    {
+        for (auto it = node.begin(); it != node.end(); ++it)
+            seed ^= RapidYamlNodeHash{}(*it);
+
+        type = 1 << 1;
+    }
+    else if (node.is_keyval())
+    {
+        seed ^= std::hash<std::string_view>{}(
+            std::string_view(node.val().data(), node.val().size()));
+        type = 1 << 2;
+    }
+    else if (node.is_val())
+    {
+        seed ^= std::hash<std::string_view>{}(
+            std::string_view(node.val().data(), node.val().size()));
+        type = 1 << 3;
+    }
+
+    // Use the node type and value to compute the hash
+    seed ^= std::hash<std::size_t>{}(type);
+
+    return seed;
 }
 
 } // namespace node_utils

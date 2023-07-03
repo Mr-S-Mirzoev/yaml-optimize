@@ -141,7 +141,12 @@ void YamlOptimizer::dump(std::string const& filename)
     write_to_ostream(of);
 }
 
-void YamlOptimizer::get_info() { get_info_impl(tree_.rootref()); }
+/* clang-format off */
+void YamlOptimizer::get_info() 
+{
+    get_info_impl(tree_.rootref());
+}
+/* clang-format on */
 
 bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a,
                                      const ryml::ConstNodeRef& b) const
@@ -168,6 +173,13 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
     {
         YO_DEBUG_PRINT("Size mismatch: {} vs {}", data_[a.id()].size,
                        data_[b.id()].size);
+        return false;
+    }
+
+    if (data_[a.id()].hash != data_[b.id()].hash)
+    {
+        YO_DEBUG_PRINT("Hash mismatch: {} vs {}", data_[a.id()].hash,
+                       data_[b.id()].hash);
         return false;
     }
 
@@ -263,6 +275,8 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 
     if (node_size != 0)
         return node_size;
+
+    data_[nodeId].hash = node_utils::RapidYamlNodeHash{}(node);
 
     if (!node.is_container())
         return node_size = 1;
