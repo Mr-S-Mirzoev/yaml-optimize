@@ -1,5 +1,10 @@
-#include "cli.hpp"
-#include "resolver.hpp"
+#include "cli.h"
+#include "resolver.h"
+
+#include <fstream>
+#include <iostream>
+
+#include "fmt/format.h"
 
 #ifdef YO_DEBUG
 #pragma message("Building debug version of resolver")
@@ -35,7 +40,7 @@ int main(int argc, char* argv[])
                   << std::endl;
         return 1;
     }
-    catch (const YamlOptimizerError& e)
+    catch (const YamlResolverError& e)
     {
         std::cerr << fmt::format("Error during optimization occured: {}",
                                  e.what())

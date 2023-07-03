@@ -10,6 +10,72 @@ The project aims to provide a fast and convenient way to optimise large YAML con
 - [Lyra](https://github.com/bfgroup/Lyra.git): A simple-to-use, composing, header-only, command line arguments parser for C++ 11 and beyond.
 - [fmt](https://github.com/fmtlib/fmt): A formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
 
+## Examples
+
+Currently library only supports optimizing fully identical nodes:
+
+```yaml
+# YAML example with references and anchors
+
+# Define an anchor for a nested sequence
+- top_level:
+    - nested:
+        - - Apple
+          - Orange
+          - Banana
+
+# Define an anchor for a nested mapping
+- another_level:
+    - even_deeper:
+        - further:
+            - key1: value1
+              key2: value2
+
+# Use the anchors in different parts of the YAML
+- other_level:
+    - some_key:
+        - Apple
+        - Orange
+        - Banana
+    - additional_key:
+        key1: value1
+        key2: value2
+
+# Additional data
+- SomeList:
+    - 1
+    - 2
+    - 3
+    - 4
+- SomeValue: true
+```
+
+So the result would be (note that indentations and comments are currently removed):
+
+```yaml
+- top_level:
+    - nested:
+        - &anchor_0
+          - Apple
+          - Orange
+          - Banana
+- another_level:
+    - even_deeper:
+        - further:
+            - &anchor_1
+              key1: value1
+              key2: value2
+- other_level:
+    - some_key: *anchor_0
+    - additional_key: *anchor_1
+- SomeList:
+    - 1
+    - 2
+    - 3
+    - 4
+- SomeValue: true
+```
+
 ## Roadmap
 
 - [x] Replace identical blocks with anchors to the first one

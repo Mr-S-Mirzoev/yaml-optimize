@@ -1,10 +1,12 @@
-#include "debug/exception.hpp"
+#include "cli.h"
+
+#include "debug/exception.h"
 #include "optimizer/optimizer.h"
-#include "utils/cli.hpp"
 
 #include <fmt/format.h>
 
 #include <fstream>
+#include <iostream>
 
 #ifdef YO_DEBUG
 #pragma message("Building debug version of optimizer")
