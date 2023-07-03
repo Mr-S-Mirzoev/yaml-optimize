@@ -1,37 +1,37 @@
-#pragma once
+#include "cli.h"
 
 #include <filesystem>
 #include <iostream>
-#include <stdexcept>
-#include <string>
 
 #include <lyra/lyra.hpp>
 
 namespace cli_utils
 {
-struct Args
-{
-    std::string app_name;
-    std::string in_fname;
-    std::string out_fname;
-    bool verbose = false;
-    bool show_help = false;
-};
 
-class ArgParseError : public std::runtime_error
-{
-public:
-    ArgParseError(std::string const& what) : std::runtime_error(what) {}
-};
+ArgParseError::ArgParseError(std::string const& what) : std::runtime_error(what) {}
 
 bool parse(int argc, char* argv[], Args& args)
 {
     int optimization_limit = -1;
     auto cli =
         lyra::help(args.show_help)
-            .description("YAML Resolver - A tool for resolving YAML optimized "
-                         "configurations with anchors, references and merge "
-                         "keys, resolving them into full YAML configuration") |
+            .description(
+                "YAML Optimizer - A tool for optimizing YAML configurations "
+                "with the use of anchors, references and merge keys") |
+        lyra::opt(optimization_limit, "optimisation limit")["-l"]["--limit"](
+            "limit to when to stop optimisation")
+            .optional()
+            .choices(
+                [](int optimization_limit)
+                {
+                    if (optimization_limit >= 0)
+                        return true;
+
+                    std::cerr
+                        << "Optimization Limit must be a non-negative integer."
+                        << std::endl;
+                    return false;
+                }) |
         lyra::opt(args.in_fname, "input")["-i"]["--input"]("path to input file")
             .required()
             .choices(
@@ -45,7 +45,7 @@ bool parse(int argc, char* argv[], Args& args)
                     return false;
                 }) |
         lyra::opt(args.out_fname, "output")["-o"]["--output"](
-            "path to output file (defaults to input filename + \".resolved\")")
+            "path to output file (defaults to input filename + \".optimized\")")
             .optional() |
         lyra::opt(args.verbose)["-v"]["--verbose"]("enable verbose mode")
             .optional();
@@ -63,10 +63,14 @@ bool parse(int argc, char* argv[], Args& args)
         return false;
     }
 
+    if (optimization_limit != -1)
+        args.settings.optimization_limit =
+            static_cast<std::size_t>(optimization_limit);
+
     // Set output filename to input filename with ".optimized" appended
     // if output isn't specified
     if (args.out_fname.empty())
-        args.out_fname = args.in_fname + ".resolved";
+        args.out_fname = args.in_fname + ".optimized";
 
     if (args.verbose)
     {

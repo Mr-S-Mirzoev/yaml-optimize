@@ -1,4 +1,5 @@
-add_library(${LIB_NAME} STATIC optimizer.cpp)
+file(GLOB LIB_OPTIMIZER_SOURCES "src/**/*.cpp")
+add_library(${LIB_NAME} STATIC ${LIB_OPTIMIZER_SOURCES})
 
 target_include_directories(${LIB_NAME} PUBLIC inc)
 

@@ -26,7 +26,7 @@ target_link_libraries(unittest PRIVATE Catch2::Catch2WithMain ${LIB_NAME})
 target_compile_features(unittest PRIVATE cxx_std_20)
 
 # Set the include directories
-target_include_directories(unittest PRIVATE ${PROJECT_DIR}/src/inc)
+target_include_directories(unittest PRIVATE ${PROJECT_DIR}/optimizer/inc)
 
 # Add a test target for running the unit tests with ctest
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)

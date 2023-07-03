@@ -60,7 +60,8 @@ public:
     void dump(std::string const& filename);
 
 private:
-    NAMED_PRIVATE_SECTION(Input data)
+/* clang-format off */
+NAMED_PRIVATE_SECTION(Input data)
 
     const OptimizationSettings settings_;
 
@@ -69,7 +70,7 @@ private:
     static constexpr std::string_view BOM{"\xEF\xBB\xBF"};
     bool is_utf8 = false;
 
-    NAMED_PRIVATE_SECTION(Processed data)
+NAMED_PRIVATE_SECTION(Processed data)
 
     struct NodeInfo
     {
@@ -80,27 +81,28 @@ private:
     ryml::Tree tree_;
     std::size_t anchor_count_ = 0;
 
-    NAMED_PRIVATE_SECTION(Tree pre - processing utils)
+NAMED_PRIVATE_SECTION(Tree pre-processing utils)
 
     void get_info();
     std::size_t get_info_impl(ryml::ConstNodeRef const& node);
 
-    NAMED_PRIVATE_SECTION(Node utils)
+NAMED_PRIVATE_SECTION(Node utils)
 
     bool nodes_equal(ryml::ConstNodeRef const& a,
                      ryml::ConstNodeRef const& b) const;
     bool long_types_equal(ryml::ConstNodeRef const& a,
                           ryml::ConstNodeRef const& b) const;
 
-    NAMED_PRIVATE_SECTION(IO utils)
+NAMED_PRIVATE_SECTION(IO utils)
 
     void write_to_ostream(std::ostream& os) const;
     ryml::substr get_clean_content(std::string& content);
 
 #ifdef YO_DEBUG
-    NAMED_PRIVATE_SECTION(Debug utils)
+NAMED_PRIVATE_SECTION(Debug utils)
 
     void debug_print_data() const;
 
 #endif // YO_DEBUG
-};
+/* clang-format on */
+}; // class YamlOptimizer

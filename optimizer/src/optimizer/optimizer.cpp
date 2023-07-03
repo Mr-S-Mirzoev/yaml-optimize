@@ -1,12 +1,12 @@
 #include "optimizer/optimizer.h"
 
-#include "debug/assert.hpp"
-#include "debug/print.hpp"
-#include "debug/throw.hpp"
+#include "debug/assert.h"
+#include "debug/print.h"
+#include "debug/throw.h"
 
-#include "utils/io.hpp"
-#include "utils/node.hpp"
-#include "utils/string.hpp"
+#include "utils/io.h"
+#include "utils/node.h"
+#include "utils/string.h"
 
 #include <fstream>
 #include <iostream>
@@ -56,11 +56,10 @@ void YamlOptimizer::optimize()
         for (std::size_t j = i + 1; j < data_.size(); ++j)
         {
             YO_DEBUG_PRINT("i={}; j={}", i, j);
-            if (data_.size() != tree_.size())
-                YO_DEBUG_ASSERT_WITH_MSG(
-                    data_.size() == tree_.size(),
-                    "Node count must be solvent at all times: {} != {}",
-                    data_.size(), tree_.size());
+            YO_DEBUG_ASSERT_WITH_MSG(
+                data_.size() == tree_.size(),
+                "Node count must be solvent at all times: {} != {}",
+                data_.size(), tree_.size());
 
             if (i >= data_.size() || j >= data_.size())
                 break;
@@ -101,9 +100,9 @@ void YamlOptimizer::optimize()
                 a.set_val_anchor(anchor);
             }
 
-            auto next_valid_id =
-                node_utils::get_next_valid_id_after_content_removal(
-                    b, data_.size());
+// clang-format off
+            auto next_valid_id = node_utils::get_next_valid_id_after_content_removal(b, data_.size());
+// clang-format on
 
             node_utils::set_reference(b, anchor);
 

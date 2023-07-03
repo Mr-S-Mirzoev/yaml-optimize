@@ -1,7 +1,7 @@
 #pragma once
 
-#include "debug/exception.hpp"
-#include "debug/throw.hpp"
+#include "debug/exception.h"
+#include "debug/throw.h"
 
 #include <sstream>
 
