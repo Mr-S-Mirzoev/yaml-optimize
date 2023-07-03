@@ -60,7 +60,7 @@ public:
     void dump(std::string const& filename);
 
 private:
-/* clang-format off */
+    /* clang-format off */
 NAMED_PRIVATE_SECTION(Input data)
 
     const OptimizationSettings settings_;
@@ -104,5 +104,5 @@ NAMED_PRIVATE_SECTION(Debug utils)
     void debug_print_data() const;
 
 #endif // YO_DEBUG
-/* clang-format on */
+    /* clang-format on */
 }; // class YamlOptimizer

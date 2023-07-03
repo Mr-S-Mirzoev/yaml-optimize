@@ -8,7 +8,9 @@
 namespace cli_utils
 {
 
-ArgParseError::ArgParseError(std::string const& what) : std::runtime_error(what) {}
+ArgParseError::ArgParseError(std::string const& what) : std::runtime_error(what)
+{
+}
 
 bool parse(int argc, char* argv[], Args& args)
 {

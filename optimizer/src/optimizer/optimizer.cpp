@@ -100,9 +100,9 @@ void YamlOptimizer::optimize()
                 a.set_val_anchor(anchor);
             }
 
-// clang-format off
+            // clang-format off
             auto next_valid_id = node_utils::get_next_valid_id_after_content_removal(b, data_.size());
-// clang-format on
+            // clang-format on
 
             node_utils::set_reference(b, anchor);
 
