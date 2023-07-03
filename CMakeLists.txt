@@ -14,7 +14,7 @@ add_subdirectory(deps/rapidyaml)
 set(LIB_NAME yaml-optimizer-lib)
 
 # Add optimization library as a dependency
-add_subdirectory(src)
+add_subdirectory(optimizer)
 
 if (YO_BUILD_TESTS)
     # Build Celero library for perftesting

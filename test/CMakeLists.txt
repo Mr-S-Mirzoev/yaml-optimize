@@ -24,7 +24,7 @@ target_link_libraries(unittest PRIVATE Catch2::Catch2WithMain ${LIB_NAME})
 target_compile_features(unittest PRIVATE cxx_std_20)
 
 # Set the include directories
-target_include_directories(unittest PRIVATE ${PROJECT_DIR}/src/inc)
+target_include_directories(unittest PRIVATE ${PROJECT_DIR}/optimizer/inc)
 
 # Define the target for perf tests
 file(GLOB PERF_TEST_SOURCES "${PROJECT_DIR}/test/**/*.perftest.cpp")

@@ -1,28 +1,16 @@
-#pragma once
+#include "cli.h"
 
 #include <filesystem>
 #include <iostream>
-#include <stdexcept>
-#include <string>
 
 #include <lyra/lyra.hpp>
 
 namespace cli_utils
 {
-struct Args
-{
-    std::string app_name;
-    std::string in_fname;
-    std::string out_fname;
-    bool verbose = false;
-    bool show_help = false;
-};
 
-class ArgParseError : public std::runtime_error
+ArgParseError::ArgParseError(std::string const& what) : std::runtime_error(what)
 {
-public:
-    ArgParseError(std::string const& what) : std::runtime_error(what) {}
-};
+}
 
 bool parse(int argc, char* argv[], Args& args)
 {
