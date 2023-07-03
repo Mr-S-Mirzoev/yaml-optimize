@@ -17,6 +17,9 @@ set(LIB_NAME yaml-optimizer-lib)
 add_subdirectory(src)
 
 if (YO_BUILD_TESTS)
+    # Build Celero library for perftesting
+    add_subdirectory(deps/Celero)
+
     add_subdirectory(test)
 endif(YO_BUILD_TESTS)
 

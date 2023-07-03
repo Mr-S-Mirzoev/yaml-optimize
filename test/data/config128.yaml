@@ -1,0 +1,122 @@
+fruits:
+  - Apple
+  - Banana
+persons:
+  - name: John Doe
+    age: 30
+    profession: Developer
+  - name: Jane Smith
+    age: 35
+    profession: Designer
+  - name: Mike Johnson
+    age: 40
+    profession: Engineer
+countries:
+  - name: USA
+    capital: Washington D.C.
+    population: 328.2 million
+  - name: Canada
+    capital: Ottawa
+    population: 38 million
+  - name: Germany
+    capital: Berlin
+    population: 83.2 million
+movies:
+  - title: The Shawshank Redemption
+    year: 1994
+    director: Frank Darabont
+  - title: The Godfather
+    year: 1972
+    director: Francis Ford Coppola
+  - title: The Dark Knight
+    year: 2008
+    director: Christopher Nolan
+books:
+  - title: To Kill a Mockingbird
+    author: Harper Lee
+    year: 1960
+  - title: 1984
+    author: George Orwell
+    year: 1949
+  - title: Pride and Prejudice
+    author: Jane Austen
+    year: 1813
+shops:
+  shop1:
+    - movie:
+        title: The Shawshank Redemption
+        year: 1994
+        director: Frank Darabont
+      book:
+        title: To Kill a Mockingbird
+        author: Harper Lee
+        year: 1960
+      person:
+        name: John Doe
+        age: 30
+        profession: Developer
+  shop2:
+    - movie:
+        title: The Godfather
+        year: 1972
+        director: Francis Ford Coppola
+      book:
+        title: 1984
+        author: George Orwell
+        year: 1949
+      person:
+        name: Jane Smith
+        age: 35
+        profession: Designer
+  shop3:
+    - movie:
+        title: The Dark Knight
+        year: 2008
+        director: Christopher Nolan
+      book:
+        title: Pride and Prejudice
+        author: Jane Austen
+        year: 1813
+      person:
+        name: Mike Johnson
+        age: 40
+        profession: Engineer
+  shop4:
+    - movie:
+        title: The Shawshank Redemption
+        year: 1994
+        director: Frank Darabont
+      book:
+        title: Pride and Prejudice
+        author: Jane Austen
+        year: 1813
+      person:
+        name: John Doe
+        age: 30
+        profession: Developer
+  shop5:
+    - movie:
+        title: The Godfather
+        year: 1972
+        director: Francis Ford Coppola
+      book:
+        title: To Kill a Mockingbird
+        author: Harper Lee
+        year: 1960
+      person:
+        name: Jane Smith
+        age: 35
+        profession: Designer
+  shop6:
+    - movie:
+        title: The Dark Knight
+        year: 2008
+        director: Christopher Nolan
+      book:
+        title: 1984
+        author: George Orwell
+        year: 1949
+      person:
+        name: Mike Johnson
+        age: 40
+        profession: Engineer

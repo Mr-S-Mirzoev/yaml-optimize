@@ -7,3 +7,6 @@
 [submodule "deps/Lyra"]
 	path = deps/Lyra
 	url = https://github.com/bfgroup/Lyra.git
+[submodule "deps/Celero"]
+	path = deps/Celero
+	url = https://github.com/DigitalInBlue/Celero.git

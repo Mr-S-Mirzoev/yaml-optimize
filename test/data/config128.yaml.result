@@ -1,0 +1,78 @@
+fruits:
+  - Apple
+  - Orange
+  - Banana
+persons:
+  - &person-john-doe
+    name: John Doe
+    age: 30
+    profession: Developer
+  - &person-jane-smith
+    name: Jane Smith
+    age: 35
+    profession: Designer
+  - &person-mike-johnson
+    name: Mike Johnson
+    age: 40
+    profession: Engineer
+countries:
+  - name: USA
+    capital: Washington D.C.
+    population: 328.2 million
+  - name: Canada
+    capital: Ottawa
+    population: 38 million
+  - name: Germany
+    capital: Berlin
+    population: 83.2 million
+movies:
+  - &movie-shawshank-redemption
+    title: The Shawshank Redemption
+    year: 1994
+    director: Frank Darabont
+  - &movie-godfather
+    title: The Godfather
+    year: 1972
+    director: Francis Ford Coppola
+  - &movie-dark-knight
+    title: The Dark Knight
+    year: 2008
+    director: Christopher Nolan
+books:
+  - &book-mockingbird
+    title: To Kill a Mockingbird
+    author: Harper Lee
+    year: 1960
+  - &book-1984
+    title: 1984
+    author: George Orwell
+    year: 1949
+  - &book-pride-n-prejudice
+    title: Pride and Prejudice
+    author: Jane Austen
+    year: 1813
+shops:
+  shop1:
+    - movie: *movie-shawshank-redemption
+      book: *book-mockingbird
+      person: *person-john-doe
+  shop2:
+    - movie: *movie-godfather
+      book: *book-1984
+      person: *person-jane-smith
+  shop3:
+    - movie: *movie-dark-knight
+      book: *book-pride-n-prejudice
+      person: *person-mike-johnson
+  shop4:
+    - movie: *movie-shawshank-redemption
+      book: *book-pride-n-prejudice
+      person: *person-john-doe
+  shop5:
+    - movie: *movie-godfather
+      book: *book-mockingbird
+      person: *person-jane-smith
+  shop6:
+    - movie: *movie-dark-knight
+      book: *book-1984
+      person: *person-mike-johnson
