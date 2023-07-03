@@ -101,14 +101,13 @@ RapidYamlNodeHash::operator()(const c4::yml::ConstNodeRef& node) const
     }
     else if (node.is_keyval())
     {
-        seed ^= std::hash<std::string_view>{}(
-            std::string_view(node.val().data(), node.val().size()));
+        seed ^= std::hash<std::size_t>{}(node.key().size());
+        seed ^= std::hash<std::size_t>{}(node.val().size());
         type = 1 << 2;
     }
     else if (node.is_val())
     {
-        seed ^= std::hash<std::string_view>{}(
-            std::string_view(node.val().data(), node.val().size()));
+        seed ^= std::hash<std::size_t>{}(node.val().size());
         type = 1 << 3;
     }
 
