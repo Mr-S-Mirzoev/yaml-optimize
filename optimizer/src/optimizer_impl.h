@@ -17,7 +17,7 @@
 #include "fmt/format.h"
 #include "ryml.hpp"
 
-YamlOptimizer::YamlOptimizer(std::string const& content,
+inline YamlOptimizer::YamlOptimizer(std::string const& content,
                              OptimizationSettings const& settings)
     : content_(content), settings_(settings)
 {
@@ -35,13 +35,13 @@ YamlOptimizer::YamlOptimizer(std::string const& content,
 #endif // YO_DEBUG
 }
 
-YamlOptimizer::YamlOptimizer(std::istream& is,
+inline YamlOptimizer::YamlOptimizer(std::istream& is,
                              OptimizationSettings const& settings)
     : YamlOptimizer(io_utils::get_file_content(is), settings)
 {
 }
 
-void YamlOptimizer::optimize()
+inline void YamlOptimizer::optimize()
 {
     for (std::size_t i = 0; i < data_.size() - 1; ++i)
     {
@@ -123,14 +123,14 @@ void YamlOptimizer::optimize()
 #endif // YO_DEBUG
 }
 
-std::string YamlOptimizer::str() const
+inline std::string YamlOptimizer::str() const
 {
     std::ostringstream os;
     write_to_ostream(os);
     return os.str();
 }
 
-void YamlOptimizer::dump(std::string const& filename)
+inline void YamlOptimizer::dump(std::string const& filename)
 {
     std::ofstream of(filename);
 
@@ -141,9 +141,12 @@ void YamlOptimizer::dump(std::string const& filename)
     write_to_ostream(of);
 }
 
-void YamlOptimizer::get_info() { get_info_impl(tree_.rootref()); }
+inline void YamlOptimizer::get_info()
+{
+    get_info_impl(tree_.rootref());
+}
 
-bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a,
+inline bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a,
                                      const ryml::ConstNodeRef& b) const
 {
     if (a.is_map())
@@ -161,7 +164,7 @@ bool YamlOptimizer::long_types_equal(const ryml::ConstNodeRef& a,
     return false;
 }
 
-bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
+inline bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
                                 const ryml::ConstNodeRef& b) const
 {
     if (data_[a.id()].size != data_[b.id()].size)
@@ -234,7 +237,7 @@ bool YamlOptimizer::nodes_equal(const ryml::ConstNodeRef& a,
     return true;
 }
 
-void YamlOptimizer::write_to_ostream(std::ostream& os) const
+inline void YamlOptimizer::write_to_ostream(std::ostream& os) const
 {
     if (is_utf8)
         os << BOM;
@@ -242,7 +245,7 @@ void YamlOptimizer::write_to_ostream(std::ostream& os) const
     os << tree_;
 }
 
-ryml::substr YamlOptimizer::get_clean_content(std::string& content)
+inline ryml::substr YamlOptimizer::get_clean_content(std::string& content)
 {
     std::size_t offset = 0;
     is_utf8 = string_utils::starts_with(content, BOM);
@@ -252,7 +255,7 @@ ryml::substr YamlOptimizer::get_clean_content(std::string& content)
     return {content.data() + offset, content.length() - offset};
 }
 
-std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
+inline std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 {
     // Store the size of the current node in the data vector
     std::size_t nodeId{node.id()};
@@ -278,7 +281,7 @@ std::size_t YamlOptimizer::get_info_impl(const ryml::ConstNodeRef& node)
 }
 
 #ifdef YO_DEBUG
-void YamlOptimizer::debug_print_data() const
+inline void YamlOptimizer::debug_print_data() const
 {
     for (int i = 0; i < data_.size(); ++i)
     {

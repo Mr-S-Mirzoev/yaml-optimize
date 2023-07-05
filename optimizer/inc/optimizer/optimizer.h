@@ -106,3 +106,5 @@ NAMED_PRIVATE_SECTION(Debug utils)
 #endif // YO_DEBUG
     /* clang-format on */
 }; // class YamlOptimizer
+
+#include "optimizer_impl.h"
